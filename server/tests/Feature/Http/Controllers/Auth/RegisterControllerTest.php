@@ -41,4 +41,11 @@ describe('RegisterController', function () {
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['name', 'email', 'password']);
     });
+
+    it('should redirect if authenticated', function () {
+        /** @var \Tests\TestCase $this */
+        $response = $this->actingAs(User::factory()->create(), 'sanctum')->postJson('/api/auth/register', ['name' => 'fake', 'email' => 'not@user.com', 'password' => 'p4$$w0rD']);
+
+        $response->assertRedirect('/');
+    });
 });
