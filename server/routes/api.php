@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\WhoAmIController;
+use App\Http\Controllers\Auth;
+use App\Http\Controllers\SpaceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('auth')->group(function () {
-    Route::post('login', LoginController::class)->middleware('guest');
-    Route::post('register', RegisterController::class)->middleware('guest');
-    Route::get('whoami', WhoAmIController::class)->middleware('auth:sanctum');
+    Route::post('login', Auth\LoginController::class)->middleware('guest');
+    Route::post('register', Auth\RegisterController::class)->middleware('guest');
+    Route::get('whoami', Auth\WhoAmIController::class)->middleware('auth:sanctum');
 });
+
+Route::apiResource('space', SpaceController::class)->middleware('auth:sanctum');
