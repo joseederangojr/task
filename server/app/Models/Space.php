@@ -8,7 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Space extends Model
 {
-    use HasFactory, SoftDeletes, Concerns\BelongsToUser;
+    use HasFactory, SoftDeletes;
+    use
+        Concerns\HasCreated,
+        Concerns\HasUpdated;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
 }
