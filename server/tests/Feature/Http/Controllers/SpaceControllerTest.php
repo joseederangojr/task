@@ -3,7 +3,6 @@
 use App\Models\Space;
 use App\Models\User;
 
-
 describe('SpaceController', function () {
     it('should list spaces for user', function () {
         /** @var Tests\TestCase $this */

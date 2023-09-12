@@ -11,10 +11,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 trait HashPassword
 {
-    static public function bootHashPassword()
+    public static function bootHashPassword()
     {
         static::saving(function (User $model) {
-            if (!Hash::isHashed($model->password)) {
+            if (! Hash::isHashed($model->password)) {
                 $model->password = Hash::make($model->password);
             }
         });
@@ -40,5 +40,15 @@ class User extends Authenticatable
     public function spaces()
     {
         return $this->hasMany(Space::class, 'created_by_id');
+    }
+
+    public function assignedTask()
+    {
+        return $this->hasMany(Task::class, 'assigned_to_id');
+    }
+
+    public function createdTask()
+    {
+        return $this->hasMany(Task::class, 'created_by_id');
     }
 }

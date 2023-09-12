@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\SpaceController;
+use App\Http\Controllers\SpaceTaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +23,4 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::apiResource('space', SpaceController::class)->middleware('auth:sanctum');
+Route::apiResource('space.task', SpaceTaskController::class)->middleware('auth:sanctum');
