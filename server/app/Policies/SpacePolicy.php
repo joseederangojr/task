@@ -20,7 +20,7 @@ class SpacePolicy
      */
     public function view(User $user, Space $space): bool
     {
-        return $space->user->id === $user->id;
+        return $space->created_by_id === $user->id;
     }
 
     /**
@@ -36,7 +36,7 @@ class SpacePolicy
      */
     public function update(User $user, Space $space): bool
     {
-        return $user->id === $space->user_id;
+        return $user->id === $space->created_by_id;
     }
 
     /**
@@ -44,7 +44,7 @@ class SpacePolicy
      */
     public function delete(User $user, Space $space): bool
     {
-        return $space->user->id === $user->id;
+        return $space->created_by_id === $user->id;
     }
 
     /**
@@ -52,7 +52,7 @@ class SpacePolicy
      */
     public function restore(User $user, Space $space): bool
     {
-        return $space->user->id === $user->id;
+        return $space->created_by_id === $user->id;
     }
 
     /**
@@ -60,6 +60,6 @@ class SpacePolicy
      */
     public function forceDelete(User $user, Space $space): bool
     {
-        return $space->user->id === $user->id;
+        return $space->created_by_id === $user->id;
     }
 }

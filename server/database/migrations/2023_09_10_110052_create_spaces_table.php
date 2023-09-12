@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('spaces', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('created_by_id')->unsigned();
+            $table->bigInteger('updated_by_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('created_by_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('updated_by_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

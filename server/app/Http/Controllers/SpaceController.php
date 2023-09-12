@@ -31,7 +31,7 @@ class SpaceController extends Controller
         $user = $request->user();
 
         /** @var Space */
-        $space = Space::firstOrCreate(['user_id' => $user->id, 'name' => $request->validated('name')]);
+        $space = Space::firstOrCreate(['created_by_id' => $user->id, 'name' => $request->validated('name')]);
 
         if (! $space->wasRecentlyCreated) {
             throw new ConflictHttpException('Space already exist');

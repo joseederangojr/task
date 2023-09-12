@@ -6,7 +6,7 @@ use App\Models\User;
 
 trait BelongsToUser
 {
-    use BaseTrait;
+    use ModelTrait;
 
     public function user()
     {
