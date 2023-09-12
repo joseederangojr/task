@@ -7,7 +7,6 @@ use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Models\Space;
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class SpaceTaskController extends Controller
@@ -57,7 +56,7 @@ class SpaceTaskController extends Controller
         $task->refresh();
 
         return response()->json([
-            'data' => $task
+            'data' => $task,
         ]);
     }
 

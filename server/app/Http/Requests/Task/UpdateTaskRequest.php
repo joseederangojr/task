@@ -26,7 +26,7 @@ class UpdateTaskRequest extends FormRequest
             'description' => 'string',
             'status' => 'in:triage,todo,doing,done,abandon',
             'assigned_to_id' => 'int|nullable|exists:users,id',
-            'due_date' => 'date|nullable'
+            'due_date' => 'date|nullable',
         ];
     }
 }

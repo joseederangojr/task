@@ -138,7 +138,7 @@ describe('SpaceTaskController', function () {
         ]);
 
         $response = $this->actingAs($user, 'sanctum')->patchJson("/api/space/$space->id/task/$task->id", [
-            'title' => 'updated title'
+            'title' => 'updated title',
         ]);
 
         $response->assertOk();
@@ -175,7 +175,7 @@ describe('SpaceTaskController', function () {
             'space_id' => $space->id,
             'created_by_id' => $user->id,
             'updated_by_id' => $user->id,
-            'title' => 'forbidden'
+            'title' => 'forbidden',
         ]);
 
         $anotherUser = User::factory()->create();
@@ -185,7 +185,7 @@ describe('SpaceTaskController', function () {
         ]);
 
         $response = $this->actingAs($user, 'sanctum')->patchJson("/api/space/$notOwnedSpace->id/task/$task->id", [
-            'title' => 'forbidden title'
+            'title' => 'forbidden title',
         ]);
 
         $response->assertForbidden();
@@ -200,7 +200,7 @@ describe('SpaceTaskController', function () {
         $task = Task::factory()->create([
             'space_id' => $space->id,
             'created_by_id' => $user->id,
-            'updated_by_id' => $user->id
+            'updated_by_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user, 'sanctum')->deleteJson("/api/space/{$space->id}/task/$task->id");

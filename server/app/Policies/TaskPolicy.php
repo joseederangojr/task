@@ -19,7 +19,7 @@ class TaskPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user, ?Task $task = null, ?Space $space = null): bool
+    public function create(User $user, Task $task = null, Space $space = null): bool
     {
         return $user->id === $space->created_by_id;
     }
