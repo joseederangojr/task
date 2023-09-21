@@ -3,7 +3,7 @@
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 
-describe('LoginController', function () {
+describe('SignInController', function () {
     it('should return auth token', function () {
         /** @var \Tests\TestCase $this */
         $user = User::factory()->create([
@@ -12,7 +12,7 @@ describe('LoginController', function () {
             'password' => 'password',
         ]);
 
-        $response = $this->postJson('/api/auth/login', [
+        $response = $this->postJson('/api/auth/signin', [
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -23,7 +23,7 @@ describe('LoginController', function () {
 
     it('should return validation error', function () {
         /** @var \Tests\TestCase $this */
-        $response = $this->postJson('/api/auth/login', []);
+        $response = $this->postJson('/api/auth/signin', []);
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['email', 'password']);
@@ -31,7 +31,7 @@ describe('LoginController', function () {
 
     it('should return invalid credentials', function () {
         /** @var \Tests\TestCase $this */
-        $response = $this->postJson('/api/auth/login', ['email' => 'not@user.com', 'password' => 'p4$$w0rD']);
+        $response = $this->postJson('/api/auth/signin', ['email' => 'not@user.com', 'password' => 'p4$$w0rD']);
 
         $response->assertBadRequest();
         $response->assertJsonPath('message', 'Invalid email or password');
@@ -39,7 +39,7 @@ describe('LoginController', function () {
 
     it('should redirect if authenticated', function () {
         /** @var \Tests\TestCase $this */
-        $response = $this->actingAs(User::factory()->create(), 'sanctum')->postJson('/api/auth/login', ['email' => 'not@user.com', 'password' => 'p4$$w0rD']);
+        $response = $this->actingAs(User::factory()->create(), 'sanctum')->postJson('/api/auth/signin', ['email' => 'not@user.com', 'password' => 'p4$$w0rD']);
 
         $response->assertRedirect('/');
     });

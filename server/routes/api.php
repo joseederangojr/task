@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('auth')->group(function () {
-    Route::post('login', Auth\LoginController::class)->middleware('guest');
+    Route::post('signin', Auth\SignInController::class)->name('auth.signin')->middleware('guest');
     Route::post('register', Auth\RegisterController::class)->middleware('guest');
     Route::get('whoami', Auth\WhoAmIController::class)->middleware('auth:sanctum');
 });
