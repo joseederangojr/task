@@ -20,7 +20,7 @@ jobs:
     - name: Upgrade Chrome Driver
       run: php artisan dusk:chrome-driver 86
     - name: Start Chrome Driver
-      run: ./vendor/laravel/dusk/bin/chromedriver-linux &
+      run: chromedriver-linux &
     - name: Run Laravel Server
       run: php artisan serve --no-reload &
     - name: Directory Permissions
