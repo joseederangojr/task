@@ -24,7 +24,7 @@ jobs:
     - name: Install and Build Assets
       run: |
         npm install
-        npm run dev &
+        npm run build
     - name: Run Laravel Server
       run: php artisan serve --no-reload &
     - name: Directory Permissions
