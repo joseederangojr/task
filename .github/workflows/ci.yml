@@ -20,7 +20,7 @@ jobs:
     - name: Upgrade Chrome Driver
       run: php artisan dusk:chrome-driver --detect
     - name: Start Chrome Driver
-      run: /usr/local/share/chromedriver-linux64 &
+      run: ./vendor/laravel/dusk/bin/chromedriver-linux &
     - name: Install and Build Assets
       run: |
         npm install
