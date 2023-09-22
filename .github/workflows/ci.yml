@@ -22,7 +22,9 @@ jobs:
     - name: Start Chrome Driver
       run: /usr/local/share/chromedriver-linux64 &
     - name: Install and Build Assets
-      run: npm install && npm run dev &
+      run: |
+        npm install
+        npm run dev &
     - name: Run Laravel Server
       run: php artisan serve --no-reload &
     - name: Directory Permissions
