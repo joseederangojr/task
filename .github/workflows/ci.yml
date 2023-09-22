@@ -35,7 +35,6 @@ jobs:
       env:
         APP_URL: "http://localhost:8000"
         DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
         SESSION_DOMAIN: localhost
         SANCTUM_STATEFUL_DOMAINS: localhost:8000
 
