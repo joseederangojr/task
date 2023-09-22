@@ -51,7 +51,6 @@ const signIn = async (data: Credentials) => {
         throw new UnknownError(err.data.message);
       }
 
-      console.error(err)
       throw new UnknownError(err.message);
     })
 }
