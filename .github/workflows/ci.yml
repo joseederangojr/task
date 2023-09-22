@@ -17,6 +17,12 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
       run: php artisan key:generate
+    - name: Upgrade Chrome Driver
+      run: php artisan dusk:chrome-driver 86
+    - name: Start Chrome Driver
+      run: ./vendor/laravel/dusk/bin/chromedriver-linux &
+    - name: Run Laravel Server
+      run: php artisan serve --no-reload &
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
     - name: Create Database
@@ -30,3 +36,15 @@ jobs:
         SANCTUM_STATEFUL_DOMAINS: localhost:8000
 
       run: php artisan test
+    - name: Upload Screenshots
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots
+        path: tests/Browser/screenshots
+    - name: Upload Console Logs
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+        name: console
+        path: tests/Browser/console
