@@ -18,9 +18,9 @@ jobs:
     - name: Generate key
       run: php artisan key:generate
     - name: Upgrade Chrome Driver
-      run: php artisan dusk:chrome-driver 86
+      run: php artisan dusk:chrome-driver --detect
     - name: Start Chrome Driver
-      run: chromedriver-linux &
+      run: /usr/local/share/chromedriver-linux64 &
     - name: Run Laravel Server
       run: php artisan serve --no-reload &
     - name: Directory Permissions
