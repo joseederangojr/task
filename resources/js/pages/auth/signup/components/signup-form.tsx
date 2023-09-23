@@ -3,7 +3,6 @@ import { FieldPath, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from "@tanstack/react-query";
 import { Form, FormField, FormItem, FormLabel, FormMessage, FormDescription, FormControl } from '@/components/ui/form'
-import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
@@ -16,34 +15,30 @@ import { Link, router } from '@inertiajs/react';
 
 
 const schema = z.object({
+  name: z.string().nonempty(),
   email: z.string().email(),
-  password: z.string().nonempty(),
-  remember: z.boolean()
+  password: z.string().nonempty().min(8),
+  passwordConfirmation: z.string().nonempty(),
+}).refine(data => data.password === data.passwordConfirmation, {
+  message: 'Passwords do not match',
+  path: ['passwordConfirmation']
 })
 
 type FormData = z.infer<typeof schema>
-type Credentials = Omit<FormData, 'remember'>
 
-type AuthSignInResponse = {
+type AuthSignUpResponse = {
   authorization: {
     token: string,
     type: 'bearer',
   }
 }
 
-class InvalidCredentialError extends Error {
-  static STATUS_CODE = 400;
-}
-
-const signIn = async (data: Credentials) => {
-  return await axios.post('/auth/signin', data)
+const signUp = async (data: FormData) => {
+  return await axios.post('/auth/signup', data)
     .catch((err: Error) => {
-      if (err instanceof AppError && err.status === InvalidCredentialError.STATUS_CODE) {
-        throw new InvalidCredentialError()
-      }
-
+      console.error('signUp error', err)
       if (err instanceof ValidationError) {
-        throw new ValidationError(err.errors);
+        throw err
       }
 
       if (err instanceof AppError) {
@@ -54,39 +49,28 @@ const signIn = async (data: Credentials) => {
     })
 }
 
-function SignInForm() {
+function SignUpForm() {
   const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: window.localStorage.getItem('task.auth.email') ?? '',
+      name: '',
+      email: '',
       password: '',
-      remember: true
+      passwordConfirmation: ''
     }
   })
-  const signInMutation = useMutation<
-    AppResponseData<AuthSignInResponse>,
-    AppResponseError<Credentials>,
-    Credentials
-  >(signIn);
+  const signUpMutatio = useMutation<
+    AppResponseData<AuthSignUpResponse>,
+    AppResponseError<FormData>,
+    FormData
+  >(signUp);
 
   const onSubmit = async (data: FormData): Promise<void> => {
-    const action = data.remember ? 'setItem' : 'removeItem'
-    window.localStorage[action]('task.auth.email', data.email)
-    const response = await signInMutation.mutateAsync({
-      email: data.email,
-      password: data.password
-    }).catch((err: Error) => {
-      if (err instanceof InvalidCredentialError) {
-        return form.setError('email', {
-          type: 'manual',
-          message: 'Invalid email or password'
-        })
-      }
-
+    const response = await signUpMutatio.mutateAsync(data).catch((err: Error) => {
       if (err instanceof ValidationError) {
         for (const k in err.errors) {
-          const errorKey = k as FieldPath<Credentials>
+          const errorKey = k as FieldPath<FormData>
           return form.setError(errorKey, {
             type: 'manual',
             message: err.errors[errorKey]?.[0]
@@ -114,6 +98,20 @@ function SignInForm() {
   return (
     <Form {...form}>
       <form className='flex flex-col space-y-4' onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="name">Name</FormLabel>
+              <FormControl>
+                <Input id="name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="email"
@@ -148,24 +146,29 @@ function SignInForm() {
           )}
         />
 
-        <div className="flex items-center space-x-2">
-          <Checkbox id="terms" checked={form.watch('remember')} onCheckedChange={checked => form.setValue('remember', checked === 'indeterminate' ? false : checked)} />
-          <label
-            htmlFor="terms"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Remember me
-          </label>
-        </div>
+        <FormField
+          control={form.control}
+          name="passwordConfirmation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="passwordConfirmation">Password Confirmation</FormLabel>
+              <FormControl>
+                <Input type="password" id="passwordConfirmation" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
 
         <FormItem>
-          <Button className='w-full' type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
+          <Button className='mt-2 w-full' type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? 'Signing up...' : 'Sign up'}
           </Button>
         </FormItem>
         <div className='flex  justify-center text-sm'>
-          <span className='text-muted-foreground pr-2'>Don&apos;t have account yet?</span>
-          <Link href='/signup' className='text-primary font-bold hover:underline'>Sign up</Link>
+          <span className='text-muted-foreground pr-2'>Already have account?</span>
+          <Link href='/signin' className='text-primary font-bold hover:underline'>Sign In</Link>
         </div>
       </form>
     </Form>
@@ -174,4 +177,4 @@ function SignInForm() {
 
 
 
-export { SignInForm }
+export { SignUpForm }

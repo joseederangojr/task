@@ -16,21 +16,21 @@ class SignInController extends Controller
      */
     public function __invoke(SignInRequest $request)
     {
-        if (!Auth::attempt($request->validated())) {
+        if (! Auth::attempt($request->validated())) {
             throw new BadRequestHttpException('Invalid email or password');
         }
 
         /** @var User $user */
         $user = Auth::user();
         $request->session()->regenerate();
-        $token = $user->createToken($request->validated('email') . "|" . $request->ip());
+        $token = $user->createToken($request->validated('email').'|'.$request->ip());
 
         return response()->json([
             'data' => [
                 'authorization' => [
                     'token' => $token->plainTextToken,
                     'type' => 'bearer',
-                ]
+                ],
             ],
         ]);
     }
