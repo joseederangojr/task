@@ -20,6 +20,7 @@ Route::prefix('auth')->group(function () {
     Route::post('signin', Auth\SignInController::class)->name('signin')->middleware('guest');
     Route::post('register', Auth\RegisterController::class)->middleware('guest');
     Route::get('whoami', Auth\WhoAmIController::class)->middleware('auth:sanctum');
+    Route::post('signout', Auth\SignOutController::class)->name('signout')->middleware('auth:sanctum');
 })->name('auth.');
 
 Route::apiResource('space', SpaceController::class)->middleware('auth:sanctum');
