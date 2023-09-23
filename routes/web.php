@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\SignInController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\SignUpController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,3 +21,4 @@ Route::get('/', function () {
 })->name('home')->middleware('auth');
 
 Route::get('signin', [SignInController::class, 'page'])->name('signin')->middleware('guest');
+Route::get('signup', [SignUpController::class, 'page'])->name('signup')->middleware('guest');

@@ -17,7 +17,7 @@ axios.interceptors.request.use((config) => {
 })
 
 axios.interceptors.response.use(response => Promise.resolve(response.data), (err: AxiosError<AppResponseError<any>>) => {
-  if (err.status === 422) {
+  if (err.response?.status === 422) {
     return Promise.reject(new ValidationError(err.response?.data.errors!))
   }
 
