@@ -5,14 +5,14 @@ namespace Tests\Browser\Pages;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page;
 
-class SignInPage extends Page
+class SignUpPage extends Page
 {
     /**
      * Get the URL for the page.
      */
     public function url(): string
     {
-        return '/signin';
+        return '/signup';
     }
 
     /**
@@ -29,11 +29,12 @@ class SignInPage extends Page
     public static function siteElements(): array
     {
         return [
-            '@email' => 'input[type=email]',
-            '@password' => 'input[type=password]',
-            '@remember' => 'button[role=checkbox]',
+            '@name' => 'input[id="name"]',
+            '@email' => 'input[id="email"]',
+            '@password' => 'input[id="password"]',
+            '@passwordConfirmation' => 'input[id="passwordConfirmation"]',
             '@submit' => 'button[type=submit]',
-            '@signup' => 'a[href="/signup"]',
+            '@signin' => 'a[href="/signin"]',
         ];
     }
 }

@@ -4,10 +4,6 @@ use App\Models\User;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\SignInPage;
 
-beforeEach(function () {
-    User::factory(5)->create();
-});
-
 describe('SignInTest', function () {
     it('should load the page without problem', function () {
         /** @var Tests\DuskTestCase $this */
@@ -47,6 +43,17 @@ describe('SignInTest', function () {
                 ->click('@submit')
                 ->pause(300)
                 ->assertSee('Invalid email or password');
+        });
+    });
+
+    it('should navigate to signup', function () {
+        /** @var Tests\DuskTestCase $this */
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new SignInPage)
+                ->assertSee('Sign up')
+                ->click('@signup')
+                ->pause(100)
+                ->assertPathIs('/signup');
         });
     });
 });

@@ -13,7 +13,7 @@ describe('SignOutController', function () {
             []
         );
 
-        $response = $this->actingAs($user)->postJson('/api/auth/signout', [],  [
+        $response = $this->actingAs($user)->postJson('/api/auth/signout', [], [
             'referer' => env('SANCTUM_STATEFUL_DOMAINS'),
         ]);
 

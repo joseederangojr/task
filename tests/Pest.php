@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Testing\{RefreshDatabase, DatabaseTruncation, DatabaseMigrations};
+use Illuminate\Foundation\Testing\DatabaseTruncation;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DuskTestCase;
 use Tests\TestCase;
 
