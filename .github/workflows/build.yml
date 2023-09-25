@@ -1,0 +1,23 @@
+name: BUILD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: npm install
+    - name: Build for production
+      run: npm run build
+    - name: Build artifact
+      run: |
+        rm -rf resources/css resources/js
+        tar -cvf ./build.tar --include="app" --include="bootstrap" --include="config" --include="database" --include="public" --include="resources" --include="routes" --include="storage" --include="composer.json" --include="composer.lock" --include="artisan"  *
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build.tar

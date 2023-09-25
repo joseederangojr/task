@@ -1,4 +1,4 @@
-name: CI
+name: TEST
 
 on:
   push:
@@ -41,7 +41,7 @@ jobs:
         path: tests/Browser/screenshots
     - name: Upload Console Logs
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: console
         path: tests/Browser/console
