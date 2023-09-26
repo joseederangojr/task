@@ -13,16 +13,14 @@ jobs:
       run: npm install
     - name: Build for production
       run: npm run build
+    - name: Build artifact
+      run: |
+        mkdir artifact
+        rm -rf resources/css resources/js
+        cp -r app bootstrap config database public resources routes storage composer* artisan build
+        cd artifact
+        zip -r build.zip .
+        cd .. && mv artifact/build.zip .
     - uses: actions/upload-artifact@v3
       with:
-        path: |
-          app
-          bootstrap
-          config
-          database
-          public
-          resources/views
-          routes
-          storage
-          composer.{json,lock}
-          artisan
+        path: build.zip
