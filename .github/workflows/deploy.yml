@@ -50,7 +50,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: build
+          name: artifact
+          path: artifact
       - name: Copy file via SSH
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -59,7 +60,7 @@ jobs:
           key: $SSH_PRIVATE_KEY
           port: $PORT
           fingerprint: $SSH_FINGERPRINT
-          source: "build.tar.gz"
+          source: "artifact/*"
           target: $TARGET_FOLDER
       - name: Install dependencies via SSH
         uses: appleboy/scp-action@v0.1.4
@@ -75,7 +76,7 @@ jobs:
               echo "Set application to maintenance mode"
               if [ -f artisan ]; then php artisan down; fi
               echo "Extracting artifact"
-              tar -xvf build.tar.gz -C .
+              unzip -o build.zip -d .
               echo "Build .env"
               echo "APP_NAME=$APP_NAME" > .env
               echo "APP_ENV=$APP_ENV" >> .env
@@ -117,3 +118,4 @@ jobs:
               php artisan view:cache
               echo "Set application to live mode"
               if [ -f artisan ]; then php artisan up; fi
+              rm -rf build.zip
