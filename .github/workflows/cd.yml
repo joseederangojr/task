@@ -1,4 +1,4 @@
-name: DEPLOY
+name: CD
 
 on:
   release:
@@ -49,10 +49,17 @@ jobs:
       SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
-        with:
-          name: artifact
-          path: artifact
+      - name: Install and Build Assets
+        run: |
+          npm install
+          npm run build
+      - name: Create artifact
+        run: |
+          mkdir build
+          rm -rf resources/css resources/js
+          cp -r app bootstrap config database public resources routes storage composer* artisan build
+          cd build
+          tar -czf build.tar.gz *
       - name: Copy file via SSH
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -61,7 +68,7 @@ jobs:
           key: $SSH_PRIVATE_KEY
           port: $PORT
           fingerprint: $SSH_FINGERPRINT
-          source: "artifact/*"
+          source: "build/build.tar.gz"
           target: $TARGET_FOLDER
       - name: Install dependencies via SSH
         uses: appleboy/scp-action@v0.1.4
@@ -77,7 +84,7 @@ jobs:
               echo "Set application to maintenance mode"
               if [ -f artisan ]; then php artisan down; fi
               echo "Extracting artifact"
-              unzip -o build.zip -d .
+              tar -xvzf build.tar.gz -C .
               echo "Build .env"
               echo "APP_NAME=$APP_NAME" > .env
               echo "APP_ENV=$APP_ENV" >> .env
@@ -119,4 +126,4 @@ jobs:
               php artisan view:cache
               echo "Set application to live mode"
               if [ -f artisan ]; then php artisan up; fi
-              rm -rf build.zip
+              rm -rf build.tar.gz
