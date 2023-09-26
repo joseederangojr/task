@@ -17,7 +17,7 @@ jobs:
       run: |
         mkdir artifact
         rm -rf resources/css resources/js
-        cp -r app bootstrap config database public resources routes storage composer* artisan build
+        cp -r app bootstrap config database public resources routes storage composer* artisan artifact
         cd artifact
         zip -r build.zip .
         cd .. && mv artifact/build.zip .
