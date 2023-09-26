@@ -15,12 +15,12 @@ jobs:
       run: npm run build
     - name: Build artifact
       run: |
+        mkdir build
         rm -rf resources/css resources/js
-        tar -cvf ./build.tar --include=\"app\" --include=\"bootstrap\" --include=\"config\" --include=\"database\" \
-        --include=\"public\" --include=\"resources\" --include=\"routes\" --include=\"storage\" \
-        --include=\"composer.json\" --include=\"composer.lock\" --include=\"artisan\" \
-        *
+        cp -r app bootstrap config database public resources routes storage composer* artisan build
+        cd build
+        tar -czvf build.tar.gz .
     - uses: actions/upload-artifact@v3
       with:
         name: build
-        path: build.tar
+        path: build/build.tar.gz
