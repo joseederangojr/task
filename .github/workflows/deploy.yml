@@ -7,28 +7,29 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
     env:
-      APP_NAME: ${{ secrets.APP_NAME }}
-      APP_ENV: ${{ secrets.APP_ENV }}
+      APP_NAME: ${{ vars.APP_NAME }}
+      APP_ENV: ${{ vars.APP_ENV }}
       APP_KEY: ${{ secrets.APP_KEY }}
-      APP_DEBUG: ${{ secrets.APP_DEBUG }}
-      APP_URL: ${{ secrets.APP_URL }}
-      LOG_CHANNEL: ${{ secrets.LOG_CHANNEL }}
-      LOG_DEPRECATIONS_CHANNEL: ${{ secrets.LOG_DEPRECATIONS_CHANNEL }}
-      LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
+      APP_DEBUG: ${{ vars.APP_DEBUG }}
+      APP_URL: ${{ vars.APP_URL }}
+      LOG_CHANNEL: ${{ vars.LOG_CHANNEL }}
+      LOG_DEPRECATIONS_CHANNEL: ${{ vars.LOG_DEPRECATIONS_CHANNEL }}
+      LOG_LEVEL: ${{ vars.LOG_LEVEL }}
       DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_PORT: ${{ secrets.DB_PORT }}
       DB_DATABASE: ${{ secrets.DB_DATABASE }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      BROADCAST_DRIVER: ${{ secrets.BROADCAST_DRIVER }}
-      CACHE_DRIVER: ${{ secrets.CACHE_DRIVER }}
-      FILESYSTEM_DISK: ${{ secrets.FILESYSTEM_DISK }}
-      QUEUE_CONNECTION: ${{ secrets.QUEUE_CONNECTION }}
-      SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
-      SESSION_LIFETIME: ${{ secrets.SESSION_LIFETIME }}
-      SESSION_DOMAIN: ${{ secrets.SESSION_DOMAIN }}
+      BROADCAST_DRIVER: ${{ vars.BROADCAST_DRIVER }}
+      CACHE_DRIVER: ${{ vars.CACHE_DRIVER }}
+      FILESYSTEM_DISK: ${{ vars.FILESYSTEM_DISK }}
+      QUEUE_CONNECTION: ${{ vars.QUEUE_CONNECTION }}
+      SESSION_DRIVER: ${{ vars.SESSION_DRIVER }}
+      SESSION_LIFETIME: ${{ vars.SESSION_LIFETIME }}
+      SESSION_DOMAIN: ${{ vars.SESSION_DOMAIN }}
       MAIL_MAILER: ${{ secrets.MAIL_MAILER }}
       MAIL_HOST: ${{ secrets.MAIL_HOST }}
       MAIL_PORT: ${{ secrets.MAIL_PORT }}
@@ -37,12 +38,12 @@ jobs:
       MAIL_ENCRYPTION: ${{ secrets.MAIL_ENCRYPTION }}
       MAIL_FROM_ADDRESS: ${{ secrets.MAIL_FROM_ADDRESS }}
       MAIL_FROM_NAME: ${{ secrets.MAIL_FROM_NAME }}
-      SANCTUM_STATEFUL_DOMAINS: ${{ secrets.SANCTUM_STATEFUL_DOMAINS }}
+      SANCTUM_STATEFUL_DOMAINS: ${{ vars.SANCTUM_STATEFUL_DOMAINS }}
       CLOCKWORK_ENABLE: ${{ secrets.CLOCKWORK_ENABLE }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      SSH_PORT: ${{ secrets.PORT }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
       SSH_FINGERPRINT: ${{ secrets.SSH_FINGERPRINT }}
       TARGET_FOLDER: ${{ secrets.SSH_TARGET_FOLDER }}
       SHA: ${{ github.sha }}
@@ -66,7 +67,7 @@ jobs:
           host: $SSH_HOST
           username: $SSH_USER
           key: $SSH_PRIVATE_KEY
-          port: $PORT
+          port: $SSH_PORT
           fingerprint: $SSH_FINGERPRINT
           envs: APP_NAME, APP_ENV, APP_KEY, APP_DEBUG, APP_URL, LOG_CHANNEL, LOG_DEPRECATIONS_CHANNEL, LOG_LEVEL, DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD, BROADCAST_DRIVER, CACHE_DRIVER, FILESYSTEM_DISK, QUEUE_CONNECTION, SESSION_DRIVER, SESSION_LIFETIME, SESSION_DOMAIN, MAIL_MAILER, MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_ENCRYPTION, MAIL_FROM_ADDRESS, MAIL_FROM_NAME, SANCTUM_STATEFUL_DOMAINS, CLOCKWORK_ENABLE, SSH_TARGET_FOLDER, SHA
           script: |
