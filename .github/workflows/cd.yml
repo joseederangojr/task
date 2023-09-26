@@ -68,7 +68,7 @@ jobs:
           key: $SSH_PRIVATE_KEY
           port: $PORT
           fingerprint: $SSH_FINGERPRINT
-          source: "artifact/build.tar.gz"
+          source: "build/build.tar.gz"
           target: $TARGET_FOLDER
       - name: Install dependencies via SSH
         uses: appleboy/scp-action@v0.1.4
