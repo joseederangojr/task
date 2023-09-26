@@ -1,0 +1,115 @@
+name: DEPLOY
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: ${{ secrets.APP_NAME }}
+      APP_ENV: ${{ secrets.APP_ENV }}
+      APP_KEY: ${{ secrets.APP_KEY }}
+      APP_DEBUG: ${{ secrets.APP_DEBUG }}
+      APP_URL: ${{ secrets.APP_URL }}
+      LOG_CHANNEL: ${{ secrets.LOG_CHANNEL }}
+      LOG_DEPRECATIONS_CHANNEL: ${{ secrets.LOG_DEPRECATIONS_CHANNEL }}
+      LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
+      DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      BROADCAST_DRIVER: ${{ secrets.BROADCAST_DRIVER }}
+      CACHE_DRIVER: ${{ secrets.CACHE_DRIVER }}
+      FILESYSTEM_DISK: ${{ secrets.FILESYSTEM_DISK }}
+      QUEUE_CONNECTION: ${{ secrets.QUEUE_CONNECTION }}
+      SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
+      SESSION_LIFETIME: ${{ secrets.SESSION_LIFETIME }}
+      SESSION_DOMAIN: ${{ secrets.SESSION_DOMAIN }}
+      MAIL_MAILER: ${{ secrets.MAIL_MAILER }}
+      MAIL_HOST: ${{ secrets.MAIL_HOST }}
+      MAIL_PORT: ${{ secrets.MAIL_PORT }}
+      MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+      MAIL_ENCRYPTION: ${{ secrets.MAIL_ENCRYPTION }}
+      MAIL_FROM_ADDRESS: ${{ secrets.MAIL_FROM_ADDRESS }}
+      MAIL_FROM_NAME: ${{ secrets.MAIL_FROM_NAME }}
+      SANCTUM_STATEFUL_DOMAINS: ${{ secrets.SANCTUM_STATEFUL_DOMAINS }}
+      CLOCKWORK_ENABLE: ${{ secrets.CLOCKWORK_ENABLE }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_PORT: ${{ secrets.PORT }}
+      SSH_FINGERPRINT: ${{ secrets.SSH_FINGERPRINT }}
+      TARGET_FOLDER: ${{ secrets.SSH_TARGET_FOLDER }}
+      SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+      - name: Copy file via SSH
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: $SSH_HOST
+          username: $SSH_USER
+          key: $SSH_PRIVATE_KEY
+          port: $PORT
+          fingerprint: $SSH_FINGERPRINT
+          source: "build.tar"
+          target: $TARGET_FOLDER
+      - name: Install dependencies via SSH
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: $SSH_HOST
+          username: $SSH_USER
+          key: $SSH_PRIVATE_KEY
+          port: $PORT
+          fingerprint: $SSH_FINGERPRINT
+          envs: APP_NAME, APP_ENV, APP_KEY, APP_DEBUG, APP_URL, LOG_CHANNEL, LOG_DEPRECATIONS_CHANNEL, LOG_LEVEL, DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD, BROADCAST_DRIVER, CACHE_DRIVER, FILESYSTEM_DISK, QUEUE_CONNECTION, SESSION_DRIVER, SESSION_LIFETIME, SESSION_DOMAIN, MAIL_MAILER, MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_ENCRYPTION, MAIL_FROM_ADDRESS, MAIL_FROM_NAME, SANCTUM_STATEFUL_DOMAINS, CLOCKWORK_ENABLE, SSH_TARGET_FOLDER, SHA
+          script: |
+              echo "Extracting artifact"
+              tar -xvf build.tar -C .
+              echo "Build .env"
+              touch .env
+              echo "APP_NAME=$APP_NAME" >> .env
+              echo "APP_ENV=$APP_ENV" >> .env
+              echo "APP_KEY='$APP_KEY'" >> .env
+              echo "APP_DEBUG=$APP_DEBUG" >> .env
+              echo "APP_URL=$APP_URL" >> .env
+              echo "LOG_CHANNEL=$LOG_CHANNEL" >> .env
+              echo "LOG_DEPRECATIONS_CHANNEL=$LOG_DEPRECATIONS_CHANNEL" >> .env
+              echo "LOG_LEVEL=$LOG_LEVEL" >> .env
+              echo "DB_CONNECTION=$DB_CONNECTION}" >> .env
+              echo "DB_HOST=$DB_HOST" >> .env
+              echo "DB_PORT=$DB_PORT" >> .env
+              echo "DB_DATABASE=$DB_DATABASE" >> .env
+              echo "DB_USERNAME=$DB_USERNAME" >> .env
+              echo "DB_PASSWORD='$DB_PASSWORD'" >> .env
+              echo "BROADCAST_DRIVER=$BROADCAST_DRIVER" >> .env
+              echo "CACHE_DRIVER=$CACHE_DRIVER" >> .env
+              echo "FILESYSTEM_DISK=$FILESYSTEM_DISK" >> .env
+              echo "QUEUE_CONNECTION=$QUEUE_CONNECTION" >> .env
+              echo "SESSION_DRIVER=$SESSION_DRIVER" >> .env
+              echo "SESSION_LIFETIME=$SESSION_LIFETIME" >> .env
+              echo "SESSION_DOMAIN=$SESSION_DOMAIN" >> .env
+              echo "MAIL_MAILER=$MAIL_MAILER" >> .env
+              echo "MAIL_HOST=$MAIL_HOST" >> .env
+              echo "MAIL_PORT=$MAIL_PORT" >> .env
+              echo "MAIL_USERNAME=$MAIL_USERNAME" >> .env
+              echo "MAIL_PASSWORD=$MAIL_PASSWORD" >> .env
+              echo "MAIL_ENCRYPTION=$MAIL_ENCRYPTION" >> .env
+              echo "MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS" >> .env
+              echo "MAIL_FROM_NAME=$MAIL_FROM_NAME" >> .env
+              echo "SANCTUM_STATEFUL_DOMAINS=$SANCTUM_STATEFUL_DOMAINS" >> .env
+              echo "CLOCKWORK_ENABLE=$CLOCKWORK_ENABLE" >> .env
+              echo "Installing dependencies"
+              composer install --optimize-autoloader --no-dev
+              echo "Setup Laravel"
+              php artisan key:generate
+              php artisan config:cache
+              php artisan event:cache
+              php artisan route:cache
+              php artisan view:cache
