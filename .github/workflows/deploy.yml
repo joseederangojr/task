@@ -58,7 +58,7 @@ jobs:
           key: $SSH_PRIVATE_KEY
           port: $PORT
           fingerprint: $SSH_FINGERPRINT
-          source: "build.tar"
+          source: "build.tar.gz"
           target: $TARGET_FOLDER
       - name: Install dependencies via SSH
         uses: appleboy/scp-action@v0.1.4
@@ -70,11 +70,13 @@ jobs:
           fingerprint: $SSH_FINGERPRINT
           envs: APP_NAME, APP_ENV, APP_KEY, APP_DEBUG, APP_URL, LOG_CHANNEL, LOG_DEPRECATIONS_CHANNEL, LOG_LEVEL, DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD, BROADCAST_DRIVER, CACHE_DRIVER, FILESYSTEM_DISK, QUEUE_CONNECTION, SESSION_DRIVER, SESSION_LIFETIME, SESSION_DOMAIN, MAIL_MAILER, MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_ENCRYPTION, MAIL_FROM_ADDRESS, MAIL_FROM_NAME, SANCTUM_STATEFUL_DOMAINS, CLOCKWORK_ENABLE, SSH_TARGET_FOLDER, SHA
           script: |
+              cd $TARGET_FOLDER
+              echo "Set application to maintenance mode"
+              if [ -f artisan ]; then php artisan down; fi
               echo "Extracting artifact"
-              tar -xvf build.tar -C .
+              tar -xvf build.tar.gz -C .
               echo "Build .env"
-              touch .env
-              echo "APP_NAME=$APP_NAME" >> .env
+              echo "APP_NAME=$APP_NAME" > .env
               echo "APP_ENV=$APP_ENV" >> .env
               echo "APP_KEY='$APP_KEY'" >> .env
               echo "APP_DEBUG=$APP_DEBUG" >> .env
@@ -108,8 +110,9 @@ jobs:
               echo "Installing dependencies"
               composer install --optimize-autoloader --no-dev
               echo "Setup Laravel"
-              php artisan key:generate
               php artisan config:cache
               php artisan event:cache
               php artisan route:cache
               php artisan view:cache
+              echo "Set application to live mode"
+              if [ -f artisan ]; then php artisan up; fi
