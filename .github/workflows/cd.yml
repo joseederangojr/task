@@ -42,7 +42,7 @@ jobs:
       CLOCKWORK_ENABLE: ${{ secrets.CLOCKWORK_ENABLE }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
       SSH_PORT: ${{ secrets.SSH_PORT }}
       SSH_FINGERPRINT: ${{ secrets.SSH_FINGERPRINT }}
       TARGET_FOLDER: ${{ secrets.SSH_TARGET_FOLDER }}
@@ -65,9 +65,8 @@ jobs:
         with:
           host: $SSH_HOST
           username: $SSH_USER
-          key: $SSH_PRIVATE_KEY
-          port: $PORT
-          fingerprint: $SSH_FINGERPRINT
+          password: $SSH_PASSWORD
+          port: $SSH_PORT
           source: "build/build.tar.gz"
           target: $TARGET_FOLDER
       - name: Install dependencies via SSH
