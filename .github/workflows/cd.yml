@@ -9,37 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      APP_NAME: ${{ vars.APP_NAME }}
-      APP_ENV: ${{ vars.APP_ENV }}
-      APP_KEY: ${{ secrets.APP_KEY }}
-      APP_DEBUG: ${{ vars.APP_DEBUG }}
-      APP_URL: ${{ vars.APP_URL }}
-      LOG_CHANNEL: ${{ vars.LOG_CHANNEL }}
-      LOG_DEPRECATIONS_CHANNEL: ${{ vars.LOG_DEPRECATIONS_CHANNEL }}
-      LOG_LEVEL: ${{ vars.LOG_LEVEL }}
-      DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-      DB_DATABASE: ${{ secrets.DB_DATABASE }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      BROADCAST_DRIVER: ${{ vars.BROADCAST_DRIVER }}
-      CACHE_DRIVER: ${{ vars.CACHE_DRIVER }}
-      FILESYSTEM_DISK: ${{ vars.FILESYSTEM_DISK }}
-      QUEUE_CONNECTION: ${{ vars.QUEUE_CONNECTION }}
-      SESSION_DRIVER: ${{ vars.SESSION_DRIVER }}
-      SESSION_LIFETIME: ${{ vars.SESSION_LIFETIME }}
-      SESSION_DOMAIN: ${{ vars.SESSION_DOMAIN }}
-      MAIL_MAILER: ${{ secrets.MAIL_MAILER }}
-      MAIL_HOST: ${{ secrets.MAIL_HOST }}
-      MAIL_PORT: ${{ secrets.MAIL_PORT }}
-      MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-      MAIL_ENCRYPTION: ${{ secrets.MAIL_ENCRYPTION }}
-      MAIL_FROM_ADDRESS: ${{ secrets.MAIL_FROM_ADDRESS }}
-      MAIL_FROM_NAME: ${{ secrets.MAIL_FROM_NAME }}
-      SANCTUM_STATEFUL_DOMAINS: ${{ vars.SANCTUM_STATEFUL_DOMAINS }}
-      CLOCKWORK_ENABLE: ${{ secrets.CLOCKWORK_ENABLE }}
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
       SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
@@ -58,6 +27,7 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519.pub
           ssh-keyscan -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
+          cat ~/.ssh/id_ed25519.pub | ssh -p $SSH_PORT $SSH_USER@$SSH_HOST 'cat >> .ssh/authorized_keys'
       - name: Install and Build Assets
         run: |
           npm install
@@ -65,37 +35,37 @@ jobs:
       - name: Build .env
         run: |
           echo "Build .env"
-          echo "APP_NAME=$APP_NAME" > .env
-          echo "APP_ENV=$APP_ENV" >> .env
-          echo "APP_KEY='$APP_KEY'" >> .env
-          echo "APP_DEBUG=$APP_DEBUG" >> .env
-          echo "APP_URL=$APP_URL" >> .env
-          echo "LOG_CHANNEL=$LOG_CHANNEL" >> .env
-          echo "LOG_DEPRECATIONS_CHANNEL=$LOG_DEPRECATIONS_CHANNEL" >> .env
-          echo "LOG_LEVEL=$LOG_LEVEL" >> .env
-          echo "DB_CONNECTION=$DB_CONNECTION}" >> .env
-          echo "DB_HOST=$DB_HOST" >> .env
-          echo "DB_PORT=$DB_PORT" >> .env
-          echo "DB_DATABASE=$DB_DATABASE" >> .env
-          echo "DB_USERNAME=$DB_USERNAME" >> .env
-          echo "DB_PASSWORD='$DB_PASSWORD'" >> .env
-          echo "BROADCAST_DRIVER=$BROADCAST_DRIVER" >> .env
-          echo "CACHE_DRIVER=$CACHE_DRIVER" >> .env
-          echo "FILESYSTEM_DISK=$FILESYSTEM_DISK" >> .env
-          echo "QUEUE_CONNECTION=$QUEUE_CONNECTION" >> .env
-          echo "SESSION_DRIVER=$SESSION_DRIVER" >> .env
-          echo "SESSION_LIFETIME=$SESSION_LIFETIME" >> .env
-          echo "SESSION_DOMAIN=$SESSION_DOMAIN" >> .env
-          echo "MAIL_MAILER=$MAIL_MAILER" >> .env
-          echo "MAIL_HOST=$MAIL_HOST" >> .env
-          echo "MAIL_PORT=$MAIL_PORT" >> .env
-          echo "MAIL_USERNAME=$MAIL_USERNAME" >> .env
-          echo "MAIL_PASSWORD=$MAIL_PASSWORD" >> .env
-          echo "MAIL_ENCRYPTION=$MAIL_ENCRYPTION" >> .env
-          echo "MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS" >> .env
-          echo "MAIL_FROM_NAME=$MAIL_FROM_NAME" >> .env
-          echo "SANCTUM_STATEFUL_DOMAINS=$SANCTUM_STATEFUL_DOMAINS" >> .env
-          echo "CLOCKWORK_ENABLE=$CLOCKWORK_ENABLE" >> .env
+          echo "APP_NAME=${{ vars.APP_NAME }}" > .env
+          echo "APP_ENV=${{ vars.APP_ENV }}" >> .env
+          echo "APP_KEY='${{ secrets.APP_KEY }}'" >> .env
+          echo "APP_DEBUG=${{ vars.APP_DEBUG }}" >> .env
+          echo "APP_URL=${{ vars.APP_URL }}" >> .env
+          echo "LOG_CHANNEL=${{ vars.LOG_CHANNEL }}" >> .env
+          echo "LOG_DEPRECATIONS_CHANNEL=${{ vars.LOG_DEPRECATIONS_CHANNEL }}" >> .env
+          echo "LOG_LEVEL=${{ vars.LOG_LEVEL }}" >> .env
+          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD='${{ secrets.DB_PASSWORD }}'" >> .env
+          echo "BROADCAST_DRIVER=${{ vars.BROADCAST_DRIVER }}" >> .env
+          echo "CACHE_DRIVER=${{ vars.CACHE_DRIVER }}" >> .env
+          echo "FILESYSTEM_DISK=${{ vars.FILESYSTEM_DISK }}" >> .env
+          echo "QUEUE_CONNECTION=${{ vars.QUEUE_CONNECTION }}" >> .env
+          echo "SESSION_DRIVER=${{ vars.SESSION_DRIVER }}" >> .env
+          echo "SESSION_LIFETIME=${{ vars.SESSION_LIFETIME }}" >> .env
+          echo "SESSION_DOMAIN=${{ vars.SESSION_DOMAIN }}" >> .env
+          echo "MAIL_MAILER=${{ secrets.MAIL_MAILER }}" >> .env
+          echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
+          echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
+          echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
+          echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
+          echo "MAIL_ENCRYPTION=${{ secrets.MAIL_ENCRYPTION }}" >> .env
+          echo "MAIL_FROM_ADDRESS=${{ secrets.MAIL_FROM_ADDRESS }}" >> .env
+          echo "MAIL_FROM_NAME=${{ secrets.MAIL_FROM_NAME }}" >> .env
+          echo "SANCTUM_STATEFUL_DOMAINS=${{ vars.SANCTUM_STATEFUL_DOMAINS }}" >> .env
+          echo "CLOCKWORK_ENABLE=${{ secrets.CLOCKWORK_ENABLE }}" >> .env
       - name: Build deploy script
         run: |
           echo 'alias php=/opt/alt/php82/usr/bin/php'
