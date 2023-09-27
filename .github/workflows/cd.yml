@@ -98,7 +98,6 @@ jobs:
           echo "CLOCKWORK_ENABLE=$CLOCKWORK_ENABLE" >> .env
       - name: Build delpoy script
         run: |
-          echo "cd $TARGET_FOLDER" > deploy.sh
           echo 'echo "Set application to maintenance mode"' >> deploy.sh
           echo 'if [ -f artisan ]; then php artisan down; fi' >> deploy.sh
           echo 'echo "Extracting artifact"' >> deploy.sh
