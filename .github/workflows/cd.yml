@@ -44,6 +44,7 @@ jobs:
       SSH_USER: ${{ secrets.SSH_USER }}
       SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
       SSH_PORT: ${{ secrets.SSH_PORT }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_FINGERPRINT: ${{ secrets.SSH_FINGERPRINT }}
       TARGET_FOLDER: ${{ secrets.SSH_TARGET_FOLDER }}
       SHA: ${{ github.sha }}
@@ -65,7 +66,7 @@ jobs:
         with:
           host: $SSH_HOST
           username: $SSH_USER
-          password: $SSH_PASSWORD
+          key: $SSH_PRIVATE_KEY
           port: $SSH_PORT
           source: "build/build.tar.gz"
           target: $TARGET_FOLDER
@@ -74,7 +75,7 @@ jobs:
         with:
           host: $SSH_HOST
           username: $SSH_USER
-          password: $SSH_PASSWORD
+          key: $SSH_PRIVATE_KEY
           port: $SSH_PORT
           envs: APP_NAME, APP_ENV, APP_KEY, APP_DEBUG, APP_URL, LOG_CHANNEL, LOG_DEPRECATIONS_CHANNEL, LOG_LEVEL, DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD, BROADCAST_DRIVER, CACHE_DRIVER, FILESYSTEM_DISK, QUEUE_CONNECTION, SESSION_DRIVER, SESSION_LIFETIME, SESSION_DOMAIN, MAIL_MAILER, MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_ENCRYPTION, MAIL_FROM_ADDRESS, MAIL_FROM_NAME, SANCTUM_STATEFUL_DOMAINS, CLOCKWORK_ENABLE, SSH_TARGET_FOLDER, SHA
           script: |
