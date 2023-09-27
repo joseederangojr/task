@@ -96,8 +96,10 @@ jobs:
           echo "MAIL_FROM_NAME=$MAIL_FROM_NAME" >> .env
           echo "SANCTUM_STATEFUL_DOMAINS=$SANCTUM_STATEFUL_DOMAINS" >> .env
           echo "CLOCKWORK_ENABLE=$CLOCKWORK_ENABLE" >> .env
-      - name: Build delpoy script
+      - name: Build deploy script
         run: |
+          echo 'alias php=/opt/alt/php82/usr/bin/php'
+          echo 'alias composer="php -f /opt/cpanel/composer/bin/composer"'
           echo 'echo "Set application to maintenance mode"' >> deploy.sh
           echo 'if [ -f artisan ]; then php artisan down; fi' >> deploy.sh
           echo 'echo "Extracting artifact"' >> deploy.sh
@@ -105,22 +107,32 @@ jobs:
           echo 'echo "Installing dependencies"' >> deploy.sh
           echo 'composer install --optimize-autoloader --no-dev' >> deploy.sh
           echo 'echo "Setup Laravel"' >> deploy.sh
+          echo 'chmod -R 775 storage' >> deploy.sh
+          echo 'if [ ! -d /home/$SSH_USER/$TARGET_FOLDER ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/public /home/$SSH_USER/$TARGET_FOLDER; fi' >> deploy.sh
+          echo 'if [ ! -d /home/$SSH_USER/$TARGET_FOLDER/storage ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/storage/app/public /home/$SSH_USER/$TARGET_FOLDER/storage; fi' >> deploy.sh
+          echo 'php artisan storage:link' >> deploy.sh
+          echo 'php artisan migrate --force --seed' >> deploy.sh
+          echo 'php artisan cache:clear' >> deploy.sh
+          echo 'php artisan config:clear' >> deploy.sh
           echo 'php artisan config:cache' >> deploy.sh
+          echo 'php artisan event:clear' >> deploy.sh
           echo 'php artisan event:cache' >> deploy.sh
+          echo 'php artisan route:clear' >> deploy.sh
           echo 'php artisan route:cache' >> deploy.sh
+          echo 'php artisan view:clear' >> deploy.sh
           echo 'php artisan view:cache' >> deploy.sh
           echo 'echo "Set application to live mode"' >> deploy.sh
           echo 'if [ -f artisan ]; then php artisan up; fi' >> deploy.sh
-          echo 'rm -rf build.tar.gz' >> deploy.sh
+          echo 'rm -rf build.tar.gz' >> deploy.which
           chmod +x deploy.sh
       - name: Create artifact
         run: |
           mkdir build
           rm -rf resources/css resources/js
-          cp -r app bootstrap config database public resources routes storage composer* artisan deploy.sh .env build
+          cp -r app bootstrap config database public resources routes storage composer* artisan .env build
           cd build
           tar -czf build.tar.gz *
       - name: Copy build artifact to server
         run: |
-          rsync -vrm  build/build.tar.gz rsync://$SSH_USER@$SSH_HOST:$SSH_PORT/home/$SSH_USER/$TARGET_FOLDER
+          scp -r -i ~/.ssh/id_ed25519 -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
           ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "cd $TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
