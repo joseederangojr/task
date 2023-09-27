@@ -8,9 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
-    env:
-      TARGET_FOLDER: ${{ secrets.SSH_TARGET_FOLDER }}
-      SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup SSH
@@ -71,8 +68,8 @@ jobs:
           echo 'composer install --optimize-autoloader --no-dev' >> deploy.sh
           echo 'echo "Setup Laravel"' >> deploy.sh
           echo 'chmod -R 775 storage' >> deploy.sh
-          echo 'if [ ! -d /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER }} ]; then ln -s /home/${{ secrets.SSH_USER }}/apps/${{ secrets.SSH_TARGET_FOLDER /public /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER ; fi' >> deploy.sh
-          echo 'if [ ! -d /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER /storage ]; then ln -s /home/${{ secrets.SSH_USER }}/apps/${{ secrets.SSH_TARGET_FOLDER /storage/app/public /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER /storage; fi' >> deploy.sh
+          echo 'if [ ! -d /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER }} ]; then ln -s /home/${{ secrets.SSH_USER }}/apps/${{ secrets.SSH_TARGET_FOLDER }}/public /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER  }}; fi' >> deploy.sh
+          echo 'if [ ! -d /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER }}/storage ]; then ln -s /home/${{ secrets.SSH_USER }}/apps/${{ secrets.SSH_TARGET_FOLDER }}/storage/app/public /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER }}/storage; fi' >> deploy.sh
           echo 'php artisan storage:link' >> deploy.sh
           echo 'php artisan migrate --force --seed' >> deploy.sh
           echo 'php artisan cache:clear' >> deploy.sh
