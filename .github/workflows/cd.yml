@@ -27,7 +27,6 @@ jobs:
           chmod 600 ~/.ssh/ifastnet_rsa
           chmod 600 ~/.ssh/ifastnet_rsa.pub
           ssh-keyscan -H -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
-          cat ~/.ssh/ifastnet_rsa.pub | ssh -i ~/.ssh/ifastnet_rsa -p $SSH_PORT $SSH_USER@$SSH_HOST 'cat >> .ssh/authorized_keys'
       - name: Install and Build Assets
         run: |
           npm install
