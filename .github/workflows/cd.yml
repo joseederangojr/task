@@ -22,12 +22,12 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
-          echo $SSH_PRIVATE_KEY > ~/.ssh/id_ed25519
-          echo $SSH_PUBLIC_KEY > ~/.ssh/id_ed25519.pub
-          chmod 600 ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519.pub
+          echo $SSH_PRIVATE_KEY > ~/.ssh/ifastnet_rsa
+          echo $SSH_PUBLIC_KEY > ~/.ssh/ifastnet_rsa.pub
+          chmod 600 ~/.ssh/ifastnet_rsa
+          chmod 600 ~/.ssh/ifastnet_rsa.pub
           ssh-keyscan -H -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
-          cat ~/.ssh/id_ed25519.pub | ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST 'cat >> .ssh/authorized_keys'
+          cat ~/.ssh/ifastnet_rsa.pub | ssh -i ~/.ssh/ifastnet_rsa -p $SSH_PORT $SSH_USER@$SSH_HOST 'cat >> .ssh/authorized_keys'
       - name: Install and Build Assets
         run: |
           npm install
@@ -104,5 +104,5 @@ jobs:
           tar -czf build.tar.gz *
       - name: Copy build artifact to server
         run: |
-          scp -r -i ~/.ssh/id_ed25519 -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
-          ssh -i ~/.ssh/id_ed25519 $SSH_USER@$SSH_HOST -p $SSH_PORT "cd $TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
+          scp -r -i ~/.ssh/ifastnet_rsa -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
+          ssh -i ~/.ssh/ifastnet_rsa $SSH_USER@$SSH_HOST -p $SSH_PORT "cd $TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
