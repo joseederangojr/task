@@ -23,10 +23,11 @@ jobs:
           echo $SSH_PRIVATE_KEY > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p $SSH_PORT $SSH_HOST > ~/.ssh/known_hosts
-      - name: Install and Build Assets
-        run: |
-          npm install
-          npm run build
+          ssh-copy-id -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST
+      # - name: Install and Build Assets
+      #   run: |
+      #     npm install
+      #     npm run build
       - name: Build .env
         run: |
           echo "Build .env"
@@ -90,6 +91,11 @@ jobs:
           echo 'if [ -f artisan ]; then php artisan up; fi' >> deploy.sh
           echo 'rm -rf build.tar.gz' >> deploy.which
           chmod +x deploy.sh
+          echo $SSH_HOST;
+          echo $SSH_USER;
+          echo $SSH_PORT;
+          echo $SSH_PRIVATE_KEY;
+          echo $TARGET_FOLDER;
       - name: Create artifact
         run: |
           mkdir build
@@ -98,4 +104,8 @@ jobs:
           cd build
           tar -czf build.tar.gz *
       - name: Test SSH
-        run: ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST  "echo 'Hi ho!';"
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST  "ls -la"
+        # run: |
+        #   scp -r -i ~/.ssh/id_ed25519 -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
+        #   ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST  "cd $TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
