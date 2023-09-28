@@ -14,6 +14,7 @@ jobs:
       SSH_PORT: ${{ secrets.SSH_PORT }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
       TARGET_FOLDER: ${{ secrets.SSH_TARGET_FOLDER }}
       SHA: ${{ github.sha }}
     steps:
@@ -23,8 +24,8 @@ jobs:
           mkdir -p ~/.ssh/
           ssh-keygen -t ed25519  -f ~/.ssh/id_ed25519 -q -N ""
           ssh-keyscan -p $SSH_PORT $SSH_HOST > ~/.ssh/known_hosts
-          ssh-copy-id -o "StrictHostKeyChecking no" -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST
-          ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST  "ls -la"
+          ssh-copy-id -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST <<<$SSH_PASSWORD >/dev/null 2>&1
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST  "ls -la"
       # - name: Install and Build Assets
       #   run: |
       #     npm install
