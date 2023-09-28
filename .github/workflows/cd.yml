@@ -8,16 +8,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+      TARGET_FOLDER: ${{ secrets.SSH_TARGET_FOLDER }}
+      SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
-          echo ${{ secrets.SSH_PRIVATE_KEY }} > ~/.ssh/ifastnet_rsa
-          echo ${{ secrets.SSH_PUBLIC_KEY }} > ~/.ssh/ifastnet_rsa.pub
+          echo $SSH_PRIVATE_KEY > ~/.ssh/ifastnet_rsa
+          echo $SSH_PUBLIC_KEY > ~/.ssh/ifastnet_rsa.pub
           chmod 600 ~/.ssh/ifastnet_rsa
           chmod 600 ~/.ssh/ifastnet_rsa.pub
-          ssh-keyscan -H -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
       - name: Install and Build Assets
         run: |
           npm install
@@ -68,8 +77,8 @@ jobs:
           echo 'composer install --optimize-autoloader --no-dev' >> deploy.sh
           echo 'echo "Setup Laravel"' >> deploy.sh
           echo 'chmod -R 775 storage' >> deploy.sh
-          echo 'if [ ! -d /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER }} ]; then ln -s /home/${{ secrets.SSH_USER }}/apps/${{ secrets.SSH_TARGET_FOLDER }}/public /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER  }}; fi' >> deploy.sh
-          echo 'if [ ! -d /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER }}/storage ]; then ln -s /home/${{ secrets.SSH_USER }}/apps/${{ secrets.SSH_TARGET_FOLDER }}/storage/app/public /home/${{ secrets.SSH_USER }}/${{ secrets.SSH_TARGET_FOLDER }}/storage; fi' >> deploy.sh
+          echo 'if [ ! -d /home/$SSH_USER/$TARGET_FOLDER ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/public /home/$SSH_USER/$TARGET_FOLDER; fi' >> deploy.sh
+          echo 'if [ ! -d /home/$SSH_USER/$TARGET_FOLDER/storage ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/storage/app/public /home/$SSH_USER/$TARGET_FOLDER/storage; fi' >> deploy.sh
           echo 'php artisan storage:link' >> deploy.sh
           echo 'php artisan migrate --force --seed' >> deploy.sh
           echo 'php artisan cache:clear' >> deploy.sh
@@ -94,5 +103,5 @@ jobs:
           tar -czf build.tar.gz *
       - name: Copy build artifact to server
         run: |
-          scp -r -i ~/.ssh/ifastnet_rsa -P ${{ secrets.SSH_PORT }} {build/build.tar.gz,deploy.sh} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/apps/${{ secrets.SSH_TARGET_FOLDER }}
-          ssh -i ~/.ssh/ifastnet_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "cd ${{ secrets.SSH_TARGET_FOLDER }} && ./deploy.sh && rm ./deploy.sh"
+          scp -r -i ~/.ssh/ifastnet_rsa -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
+          ssh -i ~/.ssh/ifastnet_rsa $SSH_USER@$SSH_HOST -p $SSH_PORT "cd $TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
