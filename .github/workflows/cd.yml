@@ -38,7 +38,7 @@ jobs:
           echo "LOG_CHANNEL=${{ vars.LOG_CHANNEL }}" >> .env
           echo "LOG_DEPRECATIONS_CHANNEL=${{ vars.LOG_DEPRECATIONS_CHANNEL }}" >> .env
           echo "LOG_LEVEL=${{ vars.LOG_LEVEL }}" >> .env
-          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}}" >> .env
+          echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
@@ -51,26 +51,26 @@ jobs:
           echo "SESSION_DRIVER=${{ vars.SESSION_DRIVER }}" >> .env
           echo "SESSION_LIFETIME=${{ vars.SESSION_LIFETIME }}" >> .env
           echo "SESSION_DOMAIN=${{ vars.SESSION_DOMAIN }}" >> .env
-          echo "MAIL_MAILER=${{ secrets.MAIL_MAILER }}" >> .env
+          echo "MAIL_MAILER=${{ vars.MAIL_MAILER }}" >> .env
           echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
           echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
           echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> .env
-          echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
+          echo "MAIL_PASSWORD='${{ secrets.MAIL_PASSWORD }}'" >> .env
           echo "MAIL_ENCRYPTION=${{ secrets.MAIL_ENCRYPTION }}" >> .env
           echo "MAIL_FROM_ADDRESS=${{ secrets.MAIL_FROM_ADDRESS }}" >> .env
-          echo "MAIL_FROM_NAME=${{ secrets.MAIL_FROM_NAME }}" >> .env
+          echo "MAIL_FROM_NAME='${{ secrets.MAIL_FROM_NAME }}'" >> .env
           echo "SANCTUM_STATEFUL_DOMAINS=${{ vars.SANCTUM_STATEFUL_DOMAINS }}" >> .env
-          echo "CLOCKWORK_ENABLE=${{ secrets.CLOCKWORK_ENABLE }}" >> .env
+          echo "CLOCKWORK_ENABLE=${{ vars.CLOCKWORK_ENABLE }}" >> .env
       - name: Build deploy script
         run: |
-          echo 'alias php=/opt/alt/php82/usr/bin/php' >> deploy.sh
-          echo 'alias composer="php -f /opt/cpanel/composer/bin/composer"' >> deploy.sh
+          echo 'export PATH="$PATH:/opt/alt/php82/usr/bin"' >> deploy.sh
+          echo 'export PATH="$PATH:/opt/cpanel/composer/bin"' >> deploy.sh
           echo 'echo "Set application to maintenance mode"' >> deploy.sh
           echo 'if [ -f artisan ]; then php artisan down; fi' >> deploy.sh
           echo 'echo "Extracting artifact"' >> deploy.sh
           echo 'tar -xvzf build.tar.gz -C .' >> deploy.sh
           echo 'echo "Installing dependencies"' >> deploy.sh
-          echo 'composer install --optimize-autoloader --no-dev' >> deploy.sh
+          echo 'php -f composer install --optimize-autoloader --no-dev' >> deploy.sh
           echo 'echo "Setup Laravel"' >> deploy.sh
           echo 'chmod -R 775 storage' >> deploy.sh
           echo "if [ ! -d /home/$SSH_USER/$TARGET_FOLDER ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/public /home/$SSH_USER/$TARGET_FOLDER; fi" >> deploy.sh
@@ -104,7 +104,7 @@ jobs:
         uses: lhotari/action-upterm@v1
         if: ${{ failure() }}
         with:
-            wait-timeout-minutes: 5
+            wait-timeout-minutes: 2
         env:
             SSH_HOST: ${{ secrets.SSH_HOST }}
             SSH_USER: ${{ secrets.SSH_USER }}
