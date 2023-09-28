@@ -12,15 +12,22 @@ jobs:
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
       SSH_PORT: ${{ secrets.SSH_PORT }}
-      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       TARGET_FOLDER: ${{ secrets.SSH_TARGET_FOLDER }}
       SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v3
-      # - name: Install and Build Assets
-      #   run: |
-      #     npm install
-      #     npm run build
+      - name: Setup SSH
+        run: |
+          rm -rf ~/.ssh/
+          mkdir -p ~/.ssh/
+          echo $SSH_PRIVATE_KEY > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H -p $SSH_PORT $SSH_HOST > ~/.ssh/known_hosts
+      - name: Install and Build Assets
+        run: |
+          npm install
+          npm run build
       - name: Build .env
         run: |
           echo "Build .env"
@@ -57,8 +64,8 @@ jobs:
           echo "CLOCKWORK_ENABLE=${{ secrets.CLOCKWORK_ENABLE }}" >> .env
       - name: Build deploy script
         run: |
-          echo 'alias php=/opt/alt/php82/usr/bin/php'
-          echo 'alias composer="php -f /opt/cpanel/composer/bin/composer"'
+          echo 'alias php=/opt/alt/php82/usr/bin/php' >> deploy.sh
+          echo 'alias composer="php -f /opt/cpanel/composer/bin/composer"' >> deploy.sh
           echo 'echo "Set application to maintenance mode"' >> deploy.sh
           echo 'if [ -f artisan ]; then php artisan down; fi' >> deploy.sh
           echo 'echo "Extracting artifact"' >> deploy.sh
@@ -82,7 +89,7 @@ jobs:
           echo 'php artisan view:cache' >> deploy.sh
           echo 'echo "Set application to live mode"' >> deploy.sh
           echo 'if [ -f artisan ]; then php artisan up; fi' >> deploy.sh
-          echo 'rm -rf build.tar.gz' >> deploy.which
+          echo 'rm -rf build.tar.gz' >> deploy.sh
           chmod +x deploy.sh
       - name: Create artifact
         run: |
@@ -91,10 +98,7 @@ jobs:
           cp -r app bootstrap config database public resources routes storage composer* artisan .env build
           cd build
           tar -czf build.tar.gz *
-      - name: Test SSH connection
+      - name: Deploy
         run: |
-          sudo apt install sshpass -y
-          sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT $SSH_USER@$SSH_HOST  "ls -la"
-        # run: |
-        #   scp -r -i ~/.ssh/id_ed25519 -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
-        #   ssh -i ~/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST  "cd $TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
+          scp -r -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
+          ssh  -p $SSH_PORT $SSH_USER@$SSH_HOST  "cd $TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
