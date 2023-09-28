@@ -94,11 +94,11 @@ jobs:
         run: |
           mkdir build
           rm -rf resources/css resources/js
-          cp -r app bootstrap config database public resources routes storage composer* artisan .env build
+          cp -r app bootstrap config database public resources routes storage composer* artisan build
           cd build
           tar -czf build.tar.gz *
           cd ..
-          scp -i ~/.ssh/ifastnet_rsa -r -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
+          scp -i ~/.ssh/ifastnet_rsa -r -P $SSH_PORT {build/build.tar.gz,deploy.sh,.env} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
           ssh -i ~/.ssh/ifastnet_rsa -p $SSH_PORT $SSH_USER@$SSH_HOST  "cd /home/$SSH_USER/apps/$TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
       - name: Debug session
         uses: lhotari/action-upterm@v1
