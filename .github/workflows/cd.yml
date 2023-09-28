@@ -63,31 +63,29 @@ jobs:
           echo "CLOCKWORK_ENABLE=${{ vars.CLOCKWORK_ENABLE }}" >> .env
       - name: Build deploy script
         run: |
-          echo 'export PATH="$PATH:/opt/alt/php82/usr/bin"' >> deploy.sh
-          echo 'export PATH="$PATH:/opt/cpanel/composer/bin"' >> deploy.sh
           echo 'echo "Set application to maintenance mode"' >> deploy.sh
-          echo 'if [ -f artisan ]; then php artisan down; fi' >> deploy.sh
+          echo 'if [ -f artisan ]; then /opt/alt/php82/usr/bin/php artisan down; fi' >> deploy.sh
           echo 'echo "Extracting artifact"' >> deploy.sh
           echo 'tar -xvzf build.tar.gz -C .' >> deploy.sh
           echo 'echo "Installing dependencies"' >> deploy.sh
-          echo 'php -f composer install --optimize-autoloader --no-dev' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php -f /opt/cpanel/composer/bin/composer install --optimize-autoloader --no-dev' >> deploy.sh
           echo 'echo "Setup Laravel"' >> deploy.sh
           echo 'chmod -R 775 storage' >> deploy.sh
           echo "if [ ! -d /home/$SSH_USER/$TARGET_FOLDER ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/public /home/$SSH_USER/$TARGET_FOLDER; fi" >> deploy.sh
           echo "if [ ! -d /home/$SSH_USER/$TARGET_FOLDER/storage ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/storage/app/public /home/$SSH_USER/$TARGET_FOLDER/storage; fi" >> deploy.sh
-          echo 'php artisan storage:link' >> deploy.sh
-          echo 'php artisan migrate --force --seed' >> deploy.sh
-          echo 'php artisan cache:clear' >> deploy.sh
-          echo 'php artisan config:clear' >> deploy.sh
-          echo 'php artisan config:cache' >> deploy.sh
-          echo 'php artisan event:clear' >> deploy.sh
-          echo 'php artisan event:cache' >> deploy.sh
-          echo 'php artisan route:clear' >> deploy.sh
-          echo 'php artisan route:cache' >> deploy.sh
-          echo 'php artisan view:clear' >> deploy.sh
-          echo 'php artisan view:cache' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan storage:link' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan migrate --force --seed' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan cache:clear' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan config:clear' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan config:cache' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan event:clear' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan event:cache' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan route:clear' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan route:cache' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan view:clear' >> deploy.sh
+          echo '/opt/alt/php82/usr/bin/php artisan view:cache' >> deploy.sh
           echo 'echo "Set application to live mode"' >> deploy.sh
-          echo 'if [ -f artisan ]; then php artisan up; fi' >> deploy.sh
+          echo 'if [ -f artisan ]; then /opt/alt/php82/usr/bin/php artisan up; fi' >> deploy.sh
           echo 'rm -rf build.tar.gz' >> deploy.sh
           chmod +x deploy.sh
       - name: Create artifact and deploy
