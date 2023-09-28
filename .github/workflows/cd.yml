@@ -73,8 +73,8 @@ jobs:
           echo 'composer install --optimize-autoloader --no-dev' >> deploy.sh
           echo 'echo "Setup Laravel"' >> deploy.sh
           echo 'chmod -R 775 storage' >> deploy.sh
-          echo 'if [ ! -d /home/$SSH_USER/$TARGET_FOLDER ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/public /home/$SSH_USER/$TARGET_FOLDER; fi' >> deploy.sh
-          echo 'if [ ! -d /home/$SSH_USER/$TARGET_FOLDER/storage ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/storage/app/public /home/$SSH_USER/$TARGET_FOLDER/storage; fi' >> deploy.sh
+          echo "if [ ! -d /home/$SSH_USER/$TARGET_FOLDER ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/public /home/$SSH_USER/$TARGET_FOLDER; fi" >> deploy.sh
+          echo "if [ ! -d /home/$SSH_USER/$TARGET_FOLDER/storage ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/storage/app/public /home/$SSH_USER/$TARGET_FOLDER/storage; fi" >> deploy.sh
           echo 'php artisan storage:link' >> deploy.sh
           echo 'php artisan migrate --force --seed' >> deploy.sh
           echo 'php artisan cache:clear' >> deploy.sh
@@ -90,17 +90,16 @@ jobs:
           echo 'if [ -f artisan ]; then php artisan up; fi' >> deploy.sh
           echo 'rm -rf build.tar.gz' >> deploy.sh
           chmod +x deploy.sh
-      - name: Create artifact
+      - name: Create artifact and deploy
         run: |
           mkdir build
           rm -rf resources/css resources/js
           cp -r app bootstrap config database public resources routes storage composer* artisan .env build
           cd build
           tar -czf build.tar.gz *
-      - name: Deploy
-        run: |
+          cd ..
           scp -i ~/.ssh/ifastnet_rsa -r -P $SSH_PORT {build/build.tar.gz,deploy.sh} $SSH_USER@$SSH_HOST:/home/$SSH_USER/apps/$TARGET_FOLDER
-          ssh -i ~/.ssh/ifastnet_rsa -p $SSH_PORT $SSH_USER@$SSH_HOST  "cd $TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
+          ssh -i ~/.ssh/ifastnet_rsa -p $SSH_PORT $SSH_USER@$SSH_HOST  "cd /home/$SSH_USER/apps/$TARGET_FOLDER && ./deploy.sh && rm ./deploy.sh"
       - name: Debug session
         uses: lhotari/action-upterm@v1
         if: ${{ failure() }}
