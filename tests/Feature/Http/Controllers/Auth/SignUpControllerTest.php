@@ -11,12 +11,9 @@ describe('SignUpController', function () {
             'email' => 'test@user.com',
             'password' => 'password',
             'passwordConfirmation' => 'password',
-        ], [
-            'referer' => env('SANCTUM_STATEFUL_DOMAINS'),
         ]);
 
-        $response->assertCreated();
-        $response->assertJson(fn (AssertableJson $json) => $json->has('data.authorization.token'));
+        $response->assertRedirectToRoute('web.home');
     });
 
     it('should return validation exception for unique email', function () {
@@ -57,6 +54,6 @@ describe('SignUpController', function () {
                 'passwordConfirmation' => 'p4$$w0rD',
             ]);
 
-        $response->assertRedirect('/');
+        $response->assertRedirectToRoute('web.home');
     });
 });

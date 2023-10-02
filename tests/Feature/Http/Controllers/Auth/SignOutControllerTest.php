@@ -1,22 +1,13 @@
 <?php
 
 use App\Models\User;
-use Laravel\Sanctum\Sanctum;
 
 describe('SignOutController', function () {
     it('should signout user', function () {
         /** @var \Tests\TestCase $this */
-        $user = User::factory()->create();
+        $response = $this->actingAs(User::factory()->create())
+            ->postJson('/api/auth/signout');
 
-        Sanctum::actingAs(
-            $user,
-            []
-        );
-
-        $response = $this->actingAs($user)->postJson('/api/auth/signout', [], [
-            'referer' => env('SANCTUM_STATEFUL_DOMAINS'),
-        ]);
-
-        $response->assertNoContent();
+        $response->assertRedirectToRoute('web.auth.signin');
     });
 });
