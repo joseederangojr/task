@@ -37,17 +37,13 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
-            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
-            \App\Http\Middleware\ConvertCase\ConvertResponseToCamelCase::class,
+            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class
         ],
 
         'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\ConvertCase\ConvertRequestToSnakeCase::class,
-            \App\Http\Middleware\ConvertCase\ConvertResponseToCamelCase::class,
-            \Rakutentech\LaravelRequestDocs\LaravelRequestDocsMiddleware::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
     ];
 

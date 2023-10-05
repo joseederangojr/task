@@ -1,12 +1,12 @@
-import { FieldPath, FieldValues } from "react-hook-form";
+import { BreadcrumbItemProps } from "@/components/breadcrumb";
 
 export interface User {
   id: number;
   name: string;
   email: string;
-  emailVerifiedAt: string;
-  createdAt: number;
-  updatedAt: number;
+  email_verified_at: string;
+  created_at: number;
+  updated_at: number;
 }
 
 export type PageProps<
@@ -15,13 +15,5 @@ export type PageProps<
   auth: {
     user?: User;
   };
+  breadcrumbs: BreadcrumbItemProps[]
 };
-
-export type AppResponseData<T> = {
-  data: T;
-} & Record<any, any>
-
-export type AppResponseError<TFieldValues extends FieldValues = FieldValues> = {
-  message: string;
-  errors: Record<FieldPath<TFieldValues>, string[]>;
-} & Record<any, any>

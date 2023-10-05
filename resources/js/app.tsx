@@ -4,7 +4,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { Providers } from "@/components/providers";
 import "../css/app.css";
 
-const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+const appName = import.meta.env.VITE_APP_NAME || "Task | Jose Ederango Jr";
 
 createInertiaApp({
   title: (title) => `${title} - ${appName}`,

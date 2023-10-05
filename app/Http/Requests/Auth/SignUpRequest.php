@@ -25,8 +25,8 @@ class SignUpRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users,email',
-            'password' => Password::defaults()->required(),
-            'password_confirmation' => 'required|same:password',
+            'password' => array_merge(Password::required(), ['confirmed']),
+            'password_confirmation' => 'required',
         ];
     }
 }

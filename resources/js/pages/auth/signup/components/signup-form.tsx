@@ -13,7 +13,7 @@ function SignUpForm() {
     name: '',
     email: '',
     password: '',
-    passwordConfirmation: ''
+    password_confirmation: ''
   })
 
 
@@ -75,7 +75,7 @@ function SignUpForm() {
 
         <FormField
           data={form.data}
-          name="passwordConfirmation"
+          name="password_confirmation"
           render={({ field, setValue }) => (
             <FormItem>
               <FormLabel htmlFor={field.id}>Password Confirmation</FormLabel>

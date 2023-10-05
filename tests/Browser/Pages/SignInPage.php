@@ -12,7 +12,7 @@ class SignInPage extends Page
      */
     public function url(): string
     {
-        return '/signin';
+        return route('web.auth.signin', absolute: false);
     }
 
     /**
