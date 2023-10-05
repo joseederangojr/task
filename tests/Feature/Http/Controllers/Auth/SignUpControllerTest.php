@@ -11,12 +11,9 @@ describe('SignUpController', function () {
             'email' => 'test@user.com',
             'password' => 'password',
             'passwordConfirmation' => 'password',
-        ], [
-            'referer' => env('SANCTUM_STATEFUL_DOMAINS'),
         ]);
 
-        $response->assertCreated();
-        $response->assertJson(fn (AssertableJson $json) => $json->has('data.authorization.token'));
+        $response->assertRedirectToRoute('web.home');
     });
 
     it('should return validation exception for unique email', function () {
@@ -49,7 +46,7 @@ describe('SignUpController', function () {
     it('should redirect if authenticated', function () {
         /** @var \Tests\TestCase $this */
         $response = $this
-            ->actingAs(User::factory()->create(), 'sanctum')
+            ->actingAs(User::factory()->create())
             ->postJson('/api/auth/signup', [
                 'name' => 'fake',
                 'email' => 'not@user.com',
@@ -57,6 +54,6 @@ describe('SignUpController', function () {
                 'passwordConfirmation' => 'p4$$w0rD',
             ]);
 
-        $response->assertRedirect('/');
+        $response->assertRedirectToRoute('web.home');
     });
 });

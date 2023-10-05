@@ -38,23 +38,31 @@ describe('SignUpTest', function () {
 
     it('should show validation error message', function () {
         /** @var Tests\DuskTestCase $this */
-        User::factory()->create([
-            'name' => 'User',
-            'email' => 'user@email.com',
-            'password' => 'password',
-        ]);
+
         $this->browse(function (Browser $browser) {
+            $user = User::factory()->create([
+                'name' => 'User',
+                'email' => 'user@email.com',
+                'password' => 'password',
+            ]);
+
             $browser->visit(new SignUpPage)
                 ->click('@submit')
-                ->assertSee('String must contain at least 1 character(s)')
-                ->assertSee('Invalid email')
+                ->pause(300)
+                ->assertSee('The name field is required.')
+                ->assertSee('The email field is required.')
+                ->assertSee('The password field is required.')
+                ->assertSee('The password confirmation field is required.')
                 ->click('@submit')
+                ->pause(300)
                 ->type('@name', 'Name')
-                ->type('@email', 'user@email.com')
+                ->type('@email', $user->email)
                 ->type('@password', 'asdf')
                 ->type('@passwordConfirmation', 'asdsadasd')
-                ->assertSee('String must contain at least 8 character(s)')
-                ->assertSee('Passwords do not match')
+                ->click('@submit')
+                ->pause(300)
+                ->assertSee('The password field must be at least 8 characters.')
+                ->assertSee('The password confirmation field must match password.')
                 ->clear('@password')
                 ->clear('@passwordConfirmation')
                 ->type('@password', 'password')

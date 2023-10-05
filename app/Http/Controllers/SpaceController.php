@@ -6,8 +6,10 @@ use App\Http\Requests\Space\StoreSpaceRequest;
 use App\Http\Requests\Space\UpdateSpaceRequest;
 use App\Models\Space;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class SpaceController extends Controller
@@ -17,6 +19,7 @@ class SpaceController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Space::class);
         return response()->json([
             'data' => $request->user()->spaces,
         ]);
@@ -33,13 +36,11 @@ class SpaceController extends Controller
         /** @var Space */
         $space = Space::firstOrCreate(['created_by_id' => $user->id, 'name' => $request->validated('name')]);
 
-        if (! $space->wasRecentlyCreated) {
-            throw new ConflictHttpException('Space already exist');
+        if (!$space->wasRecentlyCreated) {
+            throw ValidationException::withMessages(['name' => 'Space already exist']);
         }
 
-        return response()->json([
-            'data' => $space,
-        ], JsonResponse::HTTP_CREATED);
+        return response(status: Response::HTTP_CREATED);
     }
 
     /**
@@ -47,6 +48,7 @@ class SpaceController extends Controller
      */
     public function show(Space $space)
     {
+        Gate::authorize('view', [$space]);
         return response()->json(['data' => $space]);
     }
 
@@ -66,9 +68,10 @@ class SpaceController extends Controller
      */
     public function destroy(Space $space, Request $request)
     {
+        Gate::authorize('delete', $space);
         $forceDelete = $request->input('force', false) === true;
 
-        if ($forceDelete && $request->user()->can('forceDelete', $space)) {
+        if ($forceDelete && Gate::allows('forceDelete', [$space])) {
             $space->forceDelete();
         }
 

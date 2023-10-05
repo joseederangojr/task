@@ -29,10 +29,10 @@ class SignUpPage extends Page
     public static function siteElements(): array
     {
         return [
-            '@name' => 'input[id="name"]',
-            '@email' => 'input[id="email"]',
-            '@password' => 'input[id="password"]',
-            '@passwordConfirmation' => 'input[id="passwordConfirmation"]',
+            '@name' => 'input[name="name"]',
+            '@email' => 'input[name="email"]',
+            '@password' => 'input[name="password"]',
+            '@passwordConfirmation' => 'input[name="passwordConfirmation"]',
             '@submit' => 'button[type=submit]',
             '@signin' => 'a[href="/signin"]',
         ];

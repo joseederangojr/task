@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SignOutController extends Controller
 {
@@ -12,9 +13,8 @@ class SignOutController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        $request->session()->invalidate();
+        Auth::logout();
 
-        return response()->noContent();
+        return response()->redirectTo(route('web.auth.signin'));
     }
 }

@@ -29,8 +29,8 @@ class SignInPage extends Page
     public static function siteElements(): array
     {
         return [
-            '@email' => 'input[type=email]',
-            '@password' => 'input[type=password]',
+            '@email' => 'input[name="email"]',
+            '@password' => 'input[name="password"]',
             '@remember' => 'button[role=checkbox]',
             '@submit' => 'button[type=submit]',
             '@signup' => 'a[href="/signup"]',

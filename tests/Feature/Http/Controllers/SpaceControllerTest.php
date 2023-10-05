@@ -18,12 +18,10 @@ describe('SpaceController', function () {
     it('should create space for user', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
-        Space::factory()->create(['created_by_id' => $user->id, 'updated_by_id' => $user->id, 'name' => 'exist']);
 
-        $response = $this->actingAs($user, 'sanctum')->postJson('/api/space', ['name' => 'test']);
+        $response = $this->actingAs($user)->postJson('/api/space', ['name' => 'test']);
 
         $response->assertCreated();
-        $response->assertJsonPath('data.name', 'test');
     });
 
     it('should return conflict duplicate space', function () {
@@ -31,10 +29,10 @@ describe('SpaceController', function () {
         $user = User::factory()->create();
         Space::factory()->create(['created_by_id' => $user->id, 'updated_by_id' => $user->id, 'name' => 'exist']);
 
-        $response = $this->actingAs($user, 'sanctum')->postJson('/api/space', ['name' => 'exist']);
+        $response = $this->actingAs($user)->postJson('/api/space', ['name' => 'exist']);
 
-        $response->assertConflict();
-        $response->assertJsonPath('message', 'Space already exist');
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('name');
     });
 
     it('should create duplicate space name for different user', function () {
@@ -43,10 +41,9 @@ describe('SpaceController', function () {
         $user_id = User::factory()->create()->id;
         Space::factory()->create(['created_by_id' => $user_id, 'updated_by_id' => $user_id, 'name' => 'exist']);
 
-        $response = $this->actingAs($user, 'sanctum')->postJson('/api/space', ['name' => 'exist']);
+        $response = $this->actingAs($user)->postJson('/api/space', ['name' => 'exist']);
 
         $response->assertCreated();
-        $response->assertJsonPath('data.name', 'exist');
     });
 
     it('should update space for user', function () {

@@ -20,5 +20,7 @@ Route::get('/', function () {
     return Inertia::render('home/page');
 })->name('home')->middleware('auth');
 
-Route::get('signin', [SignInController::class, 'page'])->name('signin')->middleware('guest');
-Route::get('signup', [SignUpController::class, 'page'])->name('signup')->middleware('guest');
+Route::name('auth.')->group(function () {
+    Route::get('signin', [SignInController::class, 'page'])->name('signin')->middleware('guest');
+    Route::get('signup', [SignUpController::class, 'page'])->name('signup')->middleware('guest');
+});

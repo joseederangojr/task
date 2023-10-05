@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Task;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class StoreTaskRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create', $this->space);
+        return $this->user()->can('create', [Task::class, $this->space]);
     }
 
     /**
