@@ -10,7 +10,7 @@ describe('SignUpController', function () {
             'name' => 'Test',
             'email' => 'test@user.com',
             'password' => 'password',
-            'passwordConfirmation' => 'password',
+            'password_confirmation' => 'password',
         ]);
 
         $response->assertRedirectToRoute('web.home');
@@ -28,7 +28,7 @@ describe('SignUpController', function () {
             'name' => 'Test',
             'email' => 'test@user.com',
             'password' => 'password',
-            'passwordConfirmation' => 'password',
+            'password_confirmation' => 'password',
         ]);
 
         $response->assertUnprocessable();
@@ -40,7 +40,7 @@ describe('SignUpController', function () {
         $response = $this->postJson('/api/auth/signup', []);
 
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors(['name', 'email', 'password', 'passwordConfirmation']);
+        $response->assertJsonValidationErrors(['name', 'email', 'password', 'password_confirmation']);
     });
 
     it('should redirect if authenticated', function () {
@@ -51,7 +51,7 @@ describe('SignUpController', function () {
                 'name' => 'fake',
                 'email' => 'not@user.com',
                 'password' => 'p4$$w0rD',
-                'passwordConfirmation' => 'p4$$w0rD',
+                'password_confirmation' => 'p4$$w0rD',
             ]);
 
         $response->assertRedirectToRoute('web.home');

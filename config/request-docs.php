@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'enabled' => true,
+    'enabled' => env('REQUEST_DOCS_ENABLE', false),
     // change it to true will make lrd to throw exception if rules in request class need to be changed
     // keep it false
     'debug' => false,
