@@ -37,7 +37,7 @@ describe('SignInController', function () {
                 'remember' => true
             ]);
 
-        $response->assertBadRequest();
+        $response->assertUnprocessable();
         $response->assertJsonPath('message', 'Invalid email or password');
     });
 

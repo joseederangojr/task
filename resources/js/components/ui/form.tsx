@@ -1,86 +1,130 @@
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
-import {
-  Controller,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-  FormProvider,
-  useFormContext,
-} from "react-hook-form";
+
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { useForm } from '@inertiajs/react'
 
-const Form = FormProvider;
+type TFieldValues = Record<string, any>;
+type UseFormContext<T extends TFieldValues = TFieldValues> = ReturnType<typeof useForm<T>>;
+type FormProviderProps<T extends TFieldValues = TFieldValues> = {
+  children: React.ReactNode;
+} & UseFormContext<T>;
+type UseFormFieldContext<T extends TFieldValues = TFieldValues> = {
+  id: string;
+  name: keyof T;
+}
+type UseFormField = {
+  formItemId: string,
+  formDescriptionId: string,
+  formMessageId: string,
+  error?: string,
+  setValue: (value: any) => void,
+  field: {
+    id: string,
+    name: string,
+    value: any
+  }
+}
+type FormFieldProps<T extends TFieldValues = TFieldValues> = {
+  data: UseFormContext<T>['data'],
+  name: keyof UseFormContext<T>['data'],
+  render: (props: UseFormField) => React.ReactNode,
+}
 
-type FormFieldContextValue<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
-  name: TName;
+const FormContext = React.createContext<UseFormContext | undefined>(undefined);
+const FormFieldContext = React.createContext<UseFormFieldContext | undefined>(undefined);
+const Form = <T extends TFieldValues = TFieldValues>({ children, ...form }: FormProviderProps<T>) => {
+  return (
+    <FormContext.Provider value={form as unknown as UseFormContext}>
+      {children}
+    </FormContext.Provider>
+  )
+}
+
+const useFormContext = <T extends TFieldValues = TFieldValues>() => {
+  const context = React.useContext(FormContext) as UseFormContext<T>;
+  if (context === undefined) {
+    throw new Error("useFormContext must be used within a FormProvider");
+  }
+  return context;
 };
+const useFormFieldContext = <T extends TFieldValues = TFieldValues>() => {
+  return React.useContext(FormFieldContext) as UseFormFieldContext<T>;
+}
 
-const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
-);
 
 const FormField = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
+  T extends TFieldValues = TFieldValues
+>(props: FormFieldProps<T>) => {
+  const id = React.useId();
+
+  const formContext = useFormContext<T>();
+
+  if (!formContext) {
+    throw new Error("useFormContext should be used within <Form>");
+  }
+
+  const value = formContext.data[props.name]
+  const error = formContext.errors[props.name]
+  const renderProps = {
+    formItemId: `${id}-form-item`,
+    formDescriptionId: `${id}-form-item-description`,
+    formMessageId: `${id}-form-item-message`,
+    error,
+    setValue(value: any) {
+      formContext.setData(props.name, value)
+    },
+    field: {
+      id,
+      name: props.name,
+      value
+    }
+  };
+
   return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
+    <FormFieldContext.Provider value={{ id, name: props.name } as unknown as UseFormFieldContext}>
+      {props.render(renderProps as UseFormField)}
     </FormFieldContext.Provider>
-  );
+  )
 };
 
-const useFormField = () => {
-  const fieldContext = React.useContext(FormFieldContext);
-  const itemContext = React.useContext(FormItemContext);
-  const { getFieldState, formState } = useFormContext();
 
-  const fieldState = getFieldState(fieldContext.name, formState);
+
+const useFormField = (): UseFormField => {
+  const formContext = useFormContext();
+  const fieldContext = useFormFieldContext();
 
   if (!fieldContext) {
     throw new Error("useFormField should be used within <FormField>");
   }
 
-  const { id } = itemContext;
-
+  const id = fieldContext.id
+  const value = formContext.data[fieldContext.name]
+  const error = formContext.errors[fieldContext.name]
   return {
-    id,
-    name: fieldContext.name,
     formItemId: `${id}-form-item`,
     formDescriptionId: `${id}-form-item-description`,
     formMessageId: `${id}-form-item-message`,
-    ...fieldState,
+    error,
+    setValue(value) {
+      formContext.setData(fieldContext.name, value)
+    },
+    field: {
+      ...fieldContext,
+      value
+    }
   };
 };
 
-type FormItemContextValue = {
-  id: string;
-};
-
-const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
-);
 
 const FormItem = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const id = React.useId();
-
-  return (
-    <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
-    </FormItemContext.Provider>
-  );
+  return <div ref={ref} className={cn("space-y-2", className)} {...props} />
 });
 FormItem.displayName = "FormItem";
 
@@ -146,7 +190,7 @@ const FormMessage = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : children;
+  const body = error ? String(error) : children;
   if (!body) {
     return null;
   }

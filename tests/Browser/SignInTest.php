@@ -4,6 +4,13 @@ use App\Models\User;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\SignInPage;
 
+afterEach(function () {
+    /** @var Tests\DuskTestCase $this */
+    $this->browse(function (Browser $browse) {
+        $browse->logout();
+    });
+});
+
 describe('SignInTest', function () {
     it('should load the page without problem', function () {
         /** @var Tests\DuskTestCase $this */
@@ -25,6 +32,7 @@ describe('SignInTest', function () {
             $browser->visit(new SignInPage)
                 ->type('@email', $user->email)
                 ->type('@password', 'password')
+                ->pause(300)
                 ->click('@submit')
                 ->assertButtonDisabled('@submit')
                 ->pause(300)
@@ -37,8 +45,10 @@ describe('SignInTest', function () {
         $this->browse(function (Browser $browser) {
             $browser->visit(new SignInPage)
                 ->click('@submit')
-                ->assertSee('String must contain at least 1 character(s)')
-                ->value('@email', 'invalid@email.com')
+                ->pause(300)
+                ->assertSee('The email field is required')
+                ->assertSee('The password field is required')
+                ->type('@email', 'invalid@email.com')
                 ->type('@password', 'password')
                 ->click('@submit')
                 ->pause(300)
@@ -52,7 +62,7 @@ describe('SignInTest', function () {
             $browser->visit(new SignInPage)
                 ->assertSee('Sign up')
                 ->click('@signup')
-                ->pause(100)
+                ->pause(300)
                 ->assertPathIs('/signup');
         });
     });
