@@ -54,15 +54,21 @@ function SignInForm() {
           )}
         />
 
-        <div className="flex items-center space-x-2">
-          <Checkbox id="terms" checked={form.data.remember} onCheckedChange={checked => form.setData('remember', checked === 'indeterminate' ? false : checked)} />
-          <label
-            htmlFor="terms"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Remember me
-          </label>
-        </div>
+        <FormField
+          data={form.data}
+          name='remember'
+          render={({ field, setValue }) => (
+            <FormItem className='flex items-center space-x-2 space-y-0'>
+              <Checkbox id={field.id} checked={field.value} onCheckedChange={checked => setValue(checked === 'indeterminate' ? false : checked)} />
+              <FormLabel
+                htmlFor={field.id}
+                className='cursor-pointer'
+              >
+                Remember me
+              </FormLabel>
+            </FormItem>
+          )}
+        />
 
         <FormItem>
           <Button className='w-full' type="submit" disabled={form.processing}>

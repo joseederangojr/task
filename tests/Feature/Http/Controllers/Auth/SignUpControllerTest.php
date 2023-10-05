@@ -46,7 +46,7 @@ describe('SignUpController', function () {
     it('should redirect if authenticated', function () {
         /** @var \Tests\TestCase $this */
         $response = $this
-            ->actingAs(User::factory()->create(), 'sanctum')
+            ->actingAs(User::factory()->create())
             ->postJson('/api/auth/signup', [
                 'name' => 'fake',
                 'email' => 'not@user.com',

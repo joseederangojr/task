@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Space;
 
+use App\Models\Space;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class StoreSpaceRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class StoreSpaceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        return $this->user()->can('create', [Space::class]);
     }
 
     /**

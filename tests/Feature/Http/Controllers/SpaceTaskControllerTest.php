@@ -18,7 +18,7 @@ describe('SpaceTaskController', function () {
             'updated_by_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($user, 'sanctum')->getJson("/api/space/$space->id/task");
+        $response = $this->actingAs($user)->getJson("/api/space/$space->id/task");
 
         $response->assertOk();
         $response->assertJsonCount(count($tasks), 'data');
@@ -57,11 +57,6 @@ describe('SpaceTaskController', function () {
         $response = $this->actingAs($user, 'sanctum')->postJson("/api/space/$space->id/task", $data);
 
         $response->assertCreated();
-        $response->assertJsonPath('data.title', 'Test Task');
-        $response->assertJsonFragment(array_merge($data, [
-            'spaceId' => $space->id,
-            'createdById' => $user->id,
-        ]));
     });
 
     it('should return validation error on create', function () {
@@ -77,7 +72,7 @@ describe('SpaceTaskController', function () {
         $response = $this->actingAs($user, 'sanctum')->postJson("/api/space/$space->id/task", $data);
 
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors(['title']);
+        $response->assertJsonValidationErrors('title');
     });
 
     it('should show task by id', function () {

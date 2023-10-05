@@ -11,6 +11,13 @@ class TaskPolicy
     /**
      * Determine whether the user can view the model.
      */
+    public function viewAny(User $user, Space $space): bool
+    {
+        return $user->id === $space->created_by_id;
+    }
+    /**
+     * Determine whether the user can view the model.
+     */
     public function view(User $user, Task $task, Space $space): bool
     {
         return $user->id === $space->created_by_id && $task->space_id === $space->id;
@@ -19,7 +26,7 @@ class TaskPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user, Task $task = null, Space $space = null): bool
+    public function create(User $user, Space $space): bool
     {
         return $user->id === $space->created_by_id;
     }

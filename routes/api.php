@@ -22,5 +22,5 @@ Route::prefix('auth')->group(function () {
     Route::post('signout', Auth\SignOutController::class)->name('signout')->middleware('auth');
 })->name('auth.');
 
-Route::apiResource('space', SpaceController::class)->middleware('auth');
-Route::apiResource('space.task', SpaceTaskController::class)->middleware('auth');
+Route::apiResource('space', SpaceController::class)->middleware('auth')->only(['index', 'store', 'show', 'update', 'destroy']);
+Route::apiResource('space.task', SpaceTaskController::class)->middleware('auth')->only(['index', 'store', 'show', 'update', 'destroy']);

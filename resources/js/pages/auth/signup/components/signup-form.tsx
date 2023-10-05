@@ -64,7 +64,7 @@ function SignUpForm() {
           name="password"
           render={({ field, setValue }) => (
             <FormItem>
-              <FormLabel htmlFor="password">Password</FormLabel>
+              <FormLabel htmlFor={field.id}>Password</FormLabel>
               <FormControl>
                 <Input type="password" onChange={event => setValue(event.target.value)} {...field} />
               </FormControl>
