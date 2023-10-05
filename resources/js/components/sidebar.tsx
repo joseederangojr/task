@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { InertiaLinkProps, Link, router } from '@inertiajs/react';
 import { PinLeftIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils'
-import { axios } from '@/lib/axios';
 
 
 
