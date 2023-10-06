@@ -20,6 +20,10 @@ class SignUpController extends Controller
 
         Auth::login($user, false);
 
+        $user->spaces()->create([
+            'name' => $user->name
+        ]);
+
         return response()->redirectTo(route('web.home'));
     }
 
