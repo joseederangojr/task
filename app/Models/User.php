@@ -9,22 +9,26 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
-trait HashPassword
-{
-    public static function bootHashPassword()
-    {
-        static::saving(function (User $model) {
-            if (! Hash::isHashed($model->password)) {
-                $model->password = Hash::make($model->password);
-            }
-        });
-    }
-}
-
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    use HashPassword;
+
+    protected static function booted()
+    {
+
+        static::saving(function (User $model) {
+            if (!Hash::isHashed($model->password)) {
+                $model->password = Hash::make($model->password);
+            }
+        });
+
+
+        static::created(function (User $user) {
+            $user->spaces()->create([
+                'name' => $user->name
+            ]);
+        });
+    }
 
     protected $guarded = [];
 
