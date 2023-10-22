@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Testing\Fluent\AssertableJson;
 
 describe('SignUpController', function () {
     it('should return created http response with auth token', function () {
@@ -40,19 +39,25 @@ describe('SignUpController', function () {
         $response = $this->postJson('/api/auth/signup', []);
 
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors(['name', 'email', 'password', 'password_confirmation']);
+        $response->assertJsonValidationErrors([
+            'name',
+            'email',
+            'password',
+            'password_confirmation',
+        ]);
     });
 
     it('should redirect if authenticated', function () {
         /** @var \Tests\TestCase $this */
-        $response = $this
-            ->actingAs(User::factory()->create())
-            ->postJson('/api/auth/signup', [
+        $response = $this->actingAs(User::factory()->create())->postJson(
+            '/api/auth/signup',
+            [
                 'name' => 'fake',
                 'email' => 'not@user.com',
                 'password' => 'p4$$w0rD',
                 'password_confirmation' => 'p4$$w0rD',
-            ]);
+            ]
+        );
 
         $response->assertRedirectToRoute('web.home');
     });

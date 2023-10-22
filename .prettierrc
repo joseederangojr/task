@@ -1,0 +1,20 @@
+{
+    "printWidth": 90,
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": true,
+    "bracketSameLine": true,
+    "singleQuote": false,
+    "overrides": [
+        {
+            "files": "*.php",
+            "options": {
+                "parser": "php",
+                "plugins": ["@prettier/plugin-php"],
+                "phpVersion": "8.2",
+                "trailingCommaPHP": false,
+                "singleQuote": true
+            }
+        }
+    ]
+}

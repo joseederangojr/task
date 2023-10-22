@@ -7,9 +7,9 @@ return [
     'debug' => false,
 
     /*
-    * Route where request docs will be served from laravel app.
-    * localhost:8080/request-docs
-    */
+     * Route where request docs will be served from laravel app.
+     * localhost:8080/request-docs
+     */
     'url' => 'api/docs',
     'middlewares' => [
         // \Rakutentech\LaravelRequestDocs\NotFoundWhenProduction::class,
@@ -35,18 +35,27 @@ return [
 
     // https://github.com/rakutentech/laravel-request-docs/pull/92
     // When rules are put in other method than rules()
-    'rules_methods' => [
-        'rules',
-    ],
+    'rules_methods' => ['rules'],
     // Can be overridden as // @LRDresponses 200|400|401
-    'default_responses' => ['200', '400', '401', '403', '404', '405', '422', '429', '500', '503'],
+    'default_responses' => [
+        '200',
+        '400',
+        '401',
+        '403',
+        '404',
+        '405',
+        '422',
+        '429',
+        '500',
+        '503',
+    ],
 
     // By default, LRD group your routes by the first /path.
     // This is a set of regex to group your routes by prefix.
     'group_by' => [
         'uri_patterns' => [
             '^api/v[\d]+/', // `/api/v1/users/store` group as `/api/v1/users`.
-            '^api/',        // `/api/users/store` group as `/api/users`.
+            '^api/', // `/api/users/store` group as `/api/users`.
         ],
     ],
 

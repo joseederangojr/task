@@ -4,11 +4,18 @@ use App\Models\User;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\SignUpPage;
 
+afterEach(function () {
+    $this->browse(function (Browser $browser) {
+        $browser->logout();
+    });
+});
+
 describe('SignUpTest', function () {
     it('should load the page without problem', function () {
         /** @var Tests\DuskTestCase $this */
         $this->browse(function (Browser $browser) {
-            $browser->visit(new SignUpPage)
+            $browser
+                ->visit(new SignUpPage())
                 ->assertSee('Task')
                 ->assertSee('Manage your tasks from multiple spaces in one place')
                 ->assertInputValue('@name', '')
@@ -22,7 +29,8 @@ describe('SignUpTest', function () {
     it('should sign up successfully', function () {
         /** @var Tests\DuskTestCase $this */
         $this->browse(function (Browser $browser) {
-            $browser->visit(new SignUpPage)
+            $browser
+                ->visit(new SignUpPage())
                 ->type('@name', 'Name')
                 ->type('@email', 'user@test.com')
                 ->type('@password', 'password')
@@ -38,7 +46,6 @@ describe('SignUpTest', function () {
 
     it('should show validation error message', function () {
         /** @var Tests\DuskTestCase $this */
-
         $this->browse(function (Browser $browser) {
             $user = User::factory()->create([
                 'name' => 'User',
@@ -46,7 +53,8 @@ describe('SignUpTest', function () {
                 'password' => 'password',
             ]);
 
-            $browser->visit(new SignUpPage)
+            $browser
+                ->visit(new SignUpPage())
                 ->click('@submit')
                 ->pause(300)
                 ->assertSee('The name field is required.')
@@ -75,11 +83,12 @@ describe('SignUpTest', function () {
     it('should navigate to signin', function () {
         /** @var Tests\DuskTestCase $this */
         $this->browse(function (Browser $browser) {
-            $browser->visit(new SignUpPage)
+            $browser
+                ->visit(new SignUpPage())
                 ->assertSee('Sign In')
                 ->click('@signin')
-                ->pause(100)
-                ->assertPathIs('/signin');
+                ->pause(300)
+                ->assertRouteIs('web.auth.signin');
         });
     });
 });

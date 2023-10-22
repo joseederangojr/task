@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title', 100);
             $table->text('description')->nullable();
-            $table->enum('status', ['triage', 'todo', 'doing', 'done', 'abandon'])->default('triage');
+            $table
+                ->enum('status', ['triage', 'todo', 'doing', 'done', 'abandon'])
+                ->default('triage');
             $table->date('due_date')->nullable();
             $table->unsignedBigInteger('assigned_to_id')->nullable();
             $table->unsignedBigInteger('space_id');
@@ -24,10 +26,22 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('assigned_to_id')->references('id')->on('users');
-            $table->foreign('created_by_id')->references('id')->on('users');
-            $table->foreign('updated_by_id')->references('id')->on('users');
-            $table->foreign('space_id')->references('id')->on('spaces');
+            $table
+                ->foreign('assigned_to_id')
+                ->references('id')
+                ->on('users');
+            $table
+                ->foreign('created_by_id')
+                ->references('id')
+                ->on('users');
+            $table
+                ->foreign('updated_by_id')
+                ->references('id')
+                ->on('users');
+            $table
+                ->foreign('space_id')
+                ->references('id')
+                ->on('spaces');
         });
     }
 

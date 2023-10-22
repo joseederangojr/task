@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use Concerns\HasCreated,
-        Concerns\HasUpdated;
+    use Concerns\HasCreated, Concerns\HasUpdated;
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];

@@ -30,12 +30,11 @@ describe('SignInController', function () {
 
     it('should return invalid credentials', function () {
         /** @var \Tests\TestCase $this */
-        $response = $this
-            ->postJson('/api/auth/signin', [
-                'email' => 'not@user.com',
-                'password' => 'p4$$w0rD',
-                'remember' => true
-            ]);
+        $response = $this->postJson('/api/auth/signin', [
+            'email' => 'not@user.com',
+            'password' => 'p4$$w0rD',
+            'remember' => true,
+        ]);
 
         $response->assertUnprocessable();
         $response->assertJsonPath('message', 'Invalid email or password');
@@ -43,13 +42,14 @@ describe('SignInController', function () {
 
     it('should redirect if authenticated', function () {
         /** @var \Tests\TestCase $this */
-        $response = $this
-            ->actingAs(User::factory()->create())
-            ->postJson('/api/auth/signin', [
+        $response = $this->actingAs(User::factory()->create())->postJson(
+            '/api/auth/signin',
+            [
                 'email' => 'not@user.com',
                 'password' => 'p4$$w0rD',
-                'remember' => true
-            ]);
+                'remember' => true,
+            ]
+        );
 
         $response->assertRedirectToRoute('web.home');
     });

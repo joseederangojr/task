@@ -19,14 +19,22 @@ class TaskFactory extends Factory
         return [
             'title' => fake()->title,
             'description' => fake()->text,
-            'status' => fake()->randomElement(['triage', 'todo', 'doing', 'done', 'abandon']),
+            'status' => fake()->randomElement([
+                'triage',
+                'todo',
+                'doing',
+                'done',
+                'abandon',
+            ]),
         ];
     }
 
     public function triage()
     {
-        return $this->state(fn (array $attrs) => [
-            'status' => 'triage',
-        ]);
+        return $this->state(
+            fn (array $attrs) => [
+                'status' => 'triage',
+            ]
+        );
     }
 }

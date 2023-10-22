@@ -17,6 +17,7 @@ class SpaceTaskController extends Controller
     public function index(Space $space)
     {
         Gate::authorize('viewAny', [Task::class, $space]);
+
         return response()->json([
             'data' => $space->tasks,
         ]);
@@ -29,9 +30,12 @@ class SpaceTaskController extends Controller
     {
         $task = $space->tasks()->create($request->validated());
 
-        return response()->json([
-            'data' => $task,
-        ], JsonResponse::HTTP_CREATED);
+        return response()->json(
+            [
+                'data' => $task,
+            ],
+            JsonResponse::HTTP_CREATED
+        );
     }
 
     /**

@@ -7,7 +7,10 @@ describe('SpaceController', function () {
     it('should list spaces for user', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
-        Space::factory(2)->create(['created_by_id' => $user->id, 'updated_by_id' => $user->id]);
+        Space::factory(2)->create([
+            'created_by_id' => $user->id,
+            'updated_by_id' => $user->id,
+        ]);
 
         $response = $this->actingAs($user, 'sanctum')->getJson('/api/space');
 
@@ -19,17 +22,27 @@ describe('SpaceController', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/api/space', ['name' => 'test']);
+        $response = $this->actingAs($user)->postJson('/api/space', [
+            'name' => 'test',
+            'type' => 'team',
+        ]);
 
-        $response->assertCreated();
+        $response->assertRedirectToRoute('web.home');
     });
 
     it('should return conflict duplicate space', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
-        Space::factory()->create(['created_by_id' => $user->id, 'updated_by_id' => $user->id, 'name' => 'exist']);
+        Space::factory()->create([
+            'created_by_id' => $user->id,
+            'updated_by_id' => $user->id,
+            'name' => 'exist',
+        ]);
 
-        $response = $this->actingAs($user)->postJson('/api/space', ['name' => 'exist']);
+        $response = $this->actingAs($user)->postJson('/api/space', [
+            'name' => 'exist',
+            'type' => 'team',
+        ]);
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors('name');
@@ -39,20 +52,35 @@ describe('SpaceController', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
         $user_id = User::factory()->create()->id;
-        Space::factory()->create(['created_by_id' => $user_id, 'updated_by_id' => $user_id, 'name' => 'exist']);
+        Space::factory()->create([
+            'created_by_id' => $user_id,
+            'updated_by_id' => $user_id,
+            'name' => 'exist',
+            'type' => 'team',
+        ]);
 
-        $response = $this->actingAs($user)->postJson('/api/space', ['name' => 'exist']);
+        $response = $this->actingAs($user)->postJson('/api/space', [
+            'name' => 'exist',
+            'type' => 'team',
+        ]);
 
-        $response->assertCreated();
+        $response->assertRedirectToRoute('web.home');
     });
 
     it('should update space for user', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
-        $ownedSpace = Space::factory()->create(['created_by_id' => $user->id, 'updated_by_id' => $user->id, 'name' => 'owned']);
+        $ownedSpace = Space::factory()->create([
+            'created_by_id' => $user->id,
+            'updated_by_id' => $user->id,
+            'name' => 'owned',
+        ]);
         $currentOwnedSpaceName = $ownedSpace->name;
 
-        $response = $this->actingAs($user, 'sanctum')->patchJson("/api/space/{$ownedSpace->id}", ['name' => 'updated']);
+        $response = $this->actingAs($user, 'sanctum')->patchJson(
+            "/api/space/{$ownedSpace->id}",
+            ['name' => 'updated']
+        );
 
         $response->assertOk();
         $response->assertJsonPath('data.name', 'updated');
@@ -63,9 +91,16 @@ describe('SpaceController', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
         $user_id = User::factory()->create()->id;
-        $notOwnedSpace = Space::factory()->create(['created_by_id' => $user_id, 'updated_by_id' => $user_id, 'name' => 'not owned']);
+        $notOwnedSpace = Space::factory()->create([
+            'created_by_id' => $user_id,
+            'updated_by_id' => $user_id,
+            'name' => 'not owned',
+        ]);
 
-        $response = $this->actingAs($user, 'sanctum')->patchJson("/api/space/{$notOwnedSpace->id}", ['name' => 'updated']);
+        $response = $this->actingAs($user, 'sanctum')->patchJson(
+            "/api/space/{$notOwnedSpace->id}",
+            ['name' => 'updated']
+        );
 
         $response->assertForbidden();
     });
@@ -73,9 +108,15 @@ describe('SpaceController', function () {
     it('should soft delete spaces', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
-        $ownedSpace = Space::factory()->create(['created_by_id' => $user->id, 'updated_by_id' => $user->id, 'name' => 'owned']);
+        $ownedSpace = Space::factory()->create([
+            'created_by_id' => $user->id,
+            'updated_by_id' => $user->id,
+            'name' => 'owned',
+        ]);
 
-        $response = $this->actingAs($user, 'sanctum')->deleteJson("/api/space/{$ownedSpace->id}");
+        $response = $this->actingAs($user, 'sanctum')->deleteJson(
+            "/api/space/{$ownedSpace->id}"
+        );
 
         $softDeleted = Space::withTrashed()->find($ownedSpace->id);
         $response->assertNoContent();
@@ -85,9 +126,16 @@ describe('SpaceController', function () {
     it('should delete spaces', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
-        $ownedSpace = Space::factory()->create(['created_by_id' => $user->id, 'updated_by_id' => $user->id, 'name' => 'owned']);
+        $ownedSpace = Space::factory()->create([
+            'created_by_id' => $user->id,
+            'updated_by_id' => $user->id,
+            'name' => 'owned',
+        ]);
 
-        $response = $this->actingAs($user, 'sanctum')->deleteJson("/api/space/{$ownedSpace->id}", ['force' => true]);
+        $response = $this->actingAs($user, 'sanctum')->deleteJson(
+            "/api/space/{$ownedSpace->id}",
+            ['force' => true]
+        );
 
         $softDeleted = Space::withTrashed()->find($ownedSpace->id);
         $response->assertNoContent();

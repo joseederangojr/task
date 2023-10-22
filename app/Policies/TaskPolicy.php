@@ -15,6 +15,7 @@ class TaskPolicy
     {
         return $user->id === $space->created_by_id;
     }
+
     /**
      * Determine whether the user can view the model.
      */
@@ -36,7 +37,8 @@ class TaskPolicy
      */
     public function update(User $user, Task $task, Space $space): bool
     {
-        return $task->space_id === $space->id && ($user->id === $task->created_by_id || $user->id === $task->assigned_to_id);
+        return $task->space_id === $space->id &&
+            ($user->id === $task->created_by_id || $user->id === $task->assigned_to_id);
     }
 
     /**
@@ -44,7 +46,8 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task, Space $space): bool
     {
-        return $task->space_id === $space->id && ($user->id === $task->created_by_id || $user->id === $task->assigned_to_id);
+        return $task->space_id === $space->id &&
+            ($user->id === $task->created_by_id || $user->id === $task->assigned_to_id);
     }
 
     /**
@@ -52,6 +55,7 @@ class TaskPolicy
      */
     public function restore(User $user, Task $task, Space $space): bool
     {
-        return $task->space_id === $space->id && ($user->id === $task->created_by_id || $user->id === $task->assigned_to_id);
+        return $task->space_id === $space->id &&
+            ($user->id === $task->created_by_id || $user->id === $task->assigned_to_id);
     }
 }
