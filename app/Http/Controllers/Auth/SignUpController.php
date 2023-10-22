@@ -15,13 +15,13 @@ class SignUpController extends Controller
      */
     public function __invoke(SignUpRequest $request)
     {
-        /** @var User */
+        /** @var User $user */
         $user = User::create($request->except('password_confirmation'));
 
         Auth::login($user, false);
 
         $user->spaces()->create([
-            'name' => $user->name
+            'name' => $user->name,
         ]);
 
         return response()->redirectTo(route('web.home'));

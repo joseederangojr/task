@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |------------------------------------------------------------------------------------------------------------------
     | Enable Clockwork
@@ -25,7 +24,6 @@ return [
     */
 
     'features' => [
-
         // Cache usage stats and cache queries including results
         'cache' => [
             'enabled' => env('CLOCKWORK_CACHE_ENABLED', true),
@@ -45,10 +43,16 @@ return [
             'collect_queries' => env('CLOCKWORK_DATABASE_COLLECT_QUERIES', true),
 
             // Collect details of models updates (high performance impact with a lot of model updates)
-            'collect_models_actions' => env('CLOCKWORK_DATABASE_COLLECT_MODELS_ACTIONS', true),
+            'collect_models_actions' => env(
+                'CLOCKWORK_DATABASE_COLLECT_MODELS_ACTIONS',
+                true
+            ),
 
             // Collect details of retrieved models (very high performance impact with a lot of models retrieved)
-            'collect_models_retrieved' => env('CLOCKWORK_DATABASE_COLLECT_MODELS_RETRIEVED', false),
+            'collect_models_retrieved' => env(
+                'CLOCKWORK_DATABASE_COLLECT_MODELS_RETRIEVED',
+                false
+            ),
 
             // Query execution time threshold in milliseconds after which the query will be marked as slow
             'slow_threshold' => env('CLOCKWORK_DATABASE_SLOW_THRESHOLD'),
@@ -57,7 +61,10 @@ return [
             'slow_only' => env('CLOCKWORK_DATABASE_SLOW_ONLY', false),
 
             // Detect and report duplicate queries
-            'detect_duplicate_queries' => env('CLOCKWORK_DATABASE_DETECT_DUPLICATE_QUERIES', false),
+            'detect_duplicate_queries' => env(
+                'CLOCKWORK_DATABASE_DETECT_DUPLICATE_QUERIES',
+                false
+            ),
         ],
 
         // Dispatched events
@@ -116,7 +123,6 @@ return [
             // not support collecting view data)
             'use_twig_profiler' => env('CLOCKWORK_VIEWS_USE_TWIG_PROFILER', false),
         ],
-
     ],
 
     /*
@@ -215,7 +221,10 @@ return [
         'collect_output' => env('CLOCKWORK_ARTISAN_COLLECT_OUTPUT', false),
 
         // Enable or disable collection of built-in Laravel commands
-        'except_laravel_commands' => env('CLOCKWORK_ARTISAN_EXCEPT_LARAVEL_COMMANDS', true),
+        'except_laravel_commands' => env(
+            'CLOCKWORK_ARTISAN_EXCEPT_LARAVEL_COMMANDS',
+            true
+        ),
     ],
 
     /*
@@ -288,13 +297,19 @@ return [
     'storage' => env('CLOCKWORK_STORAGE', 'files'),
 
     // Path where the Clockwork metadata is stored
-    'storage_files_path' => env('CLOCKWORK_STORAGE_FILES_PATH', storage_path('clockwork')),
+    'storage_files_path' => env(
+        'CLOCKWORK_STORAGE_FILES_PATH',
+        storage_path('clockwork')
+    ),
 
     // Compress the metadata files using gzip, trading a little bit of performance for lower disk usage
     'storage_files_compress' => env('CLOCKWORK_STORAGE_FILES_COMPRESS', false),
 
     // SQL database to use, can be a name of database configured in database.php or a path to a SQLite file
-    'storage_sql_database' => env('CLOCKWORK_STORAGE_SQL_DATABASE', storage_path('clockwork.sqlite')),
+    'storage_sql_database' => env(
+        'CLOCKWORK_STORAGE_SQL_DATABASE',
+        storage_path('clockwork.sqlite')
+    ),
 
     // SQL table name to use, the table is automatically created and updated when needed
     'storage_sql_table' => env('CLOCKWORK_STORAGE_SQL_TABLE', 'clockwork'),
@@ -316,7 +331,10 @@ return [
     'authentication' => env('CLOCKWORK_AUTHENTICATION', false),
 
     // Password for the simple authentication
-    'authentication_password' => env('CLOCKWORK_AUTHENTICATION_PASSWORD', 'VerySecretPassword'),
+    'authentication_password' => env(
+        'CLOCKWORK_AUTHENTICATION_PASSWORD',
+        'VerySecretPassword'
+    ),
 
     /*
     |------------------------------------------------------------------------------------------------------------------
@@ -350,7 +368,6 @@ return [
         'skip_classes' => [
             // App\CustomLog::class
         ],
-
     ],
 
     /*
@@ -412,5 +429,4 @@ return [
     */
 
     'server_timing' => env('CLOCKWORK_SERVER_TIMING', 10),
-
 ];

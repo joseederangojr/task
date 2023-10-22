@@ -6,11 +6,9 @@ use App\Http\Requests\Space\StoreSpaceRequest;
 use App\Http\Requests\Space\UpdateSpaceRequest;
 use App\Models\Space;
 use App\Models\User;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class SpaceController extends Controller
 {
@@ -20,6 +18,7 @@ class SpaceController extends Controller
     public function index(Request $request)
     {
         Gate::authorize('viewAny', Space::class);
+
         return response()->json([
             'data' => $request->user()->spaces,
         ]);
@@ -34,13 +33,24 @@ class SpaceController extends Controller
         $user = $request->user();
 
         /** @var Space */
-        $space = Space::firstOrCreate(['created_by_id' => $user->id, 'name' => $request->validated('name')]);
+        $space = Space::firstOrCreate(
+            [
+                'created_by_id' => $user->id,
+                'updated_by_id' => $user->id,
+                'name' => $request->validated('name'),
+            ],
+            [
+                'type' => $request->validated('type'),
+            ]
+        );
 
-        if (!$space->wasRecentlyCreated) {
-            throw ValidationException::withMessages(['name' => 'Space already exist']);
+        if (! $space->wasRecentlyCreated) {
+            throw ValidationException::withMessages([
+                'name' => 'Space already exist',
+            ]);
         }
 
-        return response(status: Response::HTTP_CREATED);
+        return back();
     }
 
     /**
@@ -49,6 +59,7 @@ class SpaceController extends Controller
     public function show(Space $space)
     {
         Gate::authorize('view', [$space]);
+
         return response()->json(['data' => $space]);
     }
 

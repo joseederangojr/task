@@ -14,6 +14,5 @@ class SpaceSeeder extends Seeder
      */
     public function run(): void
     {
-        //
     }
 }

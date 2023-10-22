@@ -16,17 +16,26 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', fn () => Inertia::render('home/page', [
-    'breadcrumbs' => [
-        [
-            'label' => 'Dashboard',
-            'href' => route('web.home', absolute: false),
-            'isCurrentPage' => true
-        ]
-    ]
-]))->name('home')->middleware('auth');
+Route::get(
+    '/',
+    fn () => Inertia::render('home/page', [
+        'breadcrumbs' => [
+            [
+                'label' => 'Dashboard',
+                'href' => route('web.home', absolute: false),
+                'isCurrentPage' => true,
+            ],
+        ],
+    ])
+)
+    ->name('home')
+    ->middleware('auth');
 
 Route::name('auth.')->group(function () {
-    Route::get('signin', [SignInController::class, 'page'])->name('signin')->middleware('guest');
-    Route::get('signup', [SignUpController::class, 'page'])->name('signup')->middleware('guest');
+    Route::get('signin', [SignInController::class, 'page'])
+        ->name('signin')
+        ->middleware('guest');
+    Route::get('signup', [SignUpController::class, 'page'])
+        ->name('signup')
+        ->middleware('guest');
 });

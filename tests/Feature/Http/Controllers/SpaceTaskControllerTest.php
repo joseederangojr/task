@@ -34,7 +34,9 @@ describe('SpaceTaskController', function () {
             'updated_by_id' => $anotherUser->id,
         ]);
 
-        $response = $this->actingAs($user, 'sanctum')->getJson("/api/space/$notOwnedSpace->id/task");
+        $response = $this->actingAs($user, 'sanctum')->getJson(
+            "/api/space/$notOwnedSpace->id/task"
+        );
 
         $response->assertForbidden();
         $response->assertJson(['message' => 'This action is unauthorized.']);
@@ -54,7 +56,10 @@ describe('SpaceTaskController', function () {
             'status' => 'triage',
         ];
 
-        $response = $this->actingAs($user, 'sanctum')->postJson("/api/space/$space->id/task", $data);
+        $response = $this->actingAs($user, 'sanctum')->postJson(
+            "/api/space/$space->id/task",
+            $data
+        );
 
         $response->assertCreated();
     });
@@ -69,7 +74,10 @@ describe('SpaceTaskController', function () {
 
         $data = [];
 
-        $response = $this->actingAs($user, 'sanctum')->postJson("/api/space/$space->id/task", $data);
+        $response = $this->actingAs($user, 'sanctum')->postJson(
+            "/api/space/$space->id/task",
+            $data
+        );
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors('title');
@@ -88,10 +96,16 @@ describe('SpaceTaskController', function () {
             'updated_by_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($user, 'sanctum')->getJson("/api/space/$space->id/task/$task->id");
+        $response = $this->actingAs($user, 'sanctum')->getJson(
+            "/api/space/$space->id/task/$task->id"
+        );
 
         $response->assertOk();
-        $response->assertJsonFragment(['id' => $task->id, 'title' => $task->title, 'status' => $task->status]);
+        $response->assertJsonFragment([
+            'id' => $task->id,
+            'title' => $task->title,
+            'status' => $task->status,
+        ]);
     });
 
     it('should return forbidden to show task by id', function () {
@@ -113,7 +127,9 @@ describe('SpaceTaskController', function () {
             'updated_by_id' => $anotherUser->id,
         ]);
 
-        $response = $this->actingAs($user, 'sanctum')->getJson("/api/space/$notOwnedSpace->id/task/$task->id");
+        $response = $this->actingAs($user, 'sanctum')->getJson(
+            "/api/space/$notOwnedSpace->id/task/$task->id"
+        );
 
         $response->assertForbidden();
         $response->assertJson(['message' => 'This action is unauthorized.']);
@@ -132,12 +148,19 @@ describe('SpaceTaskController', function () {
             'updated_by_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($user, 'sanctum')->patchJson("/api/space/$space->id/task/$task->id", [
-            'title' => 'updated title',
-        ]);
+        $response = $this->actingAs($user, 'sanctum')->patchJson(
+            "/api/space/$space->id/task/$task->id",
+            [
+                'title' => 'updated title',
+            ]
+        );
 
         $response->assertOk();
-        $response->assertJsonFragment(['id' => $task->id, 'title' => 'updated title', 'status' => $task->status]);
+        $response->assertJsonFragment([
+            'id' => $task->id,
+            'title' => 'updated title',
+            'status' => $task->status,
+        ]);
     });
 
     it('should return validation errors update task', function () {
@@ -153,7 +176,10 @@ describe('SpaceTaskController', function () {
             'updated_by_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($user, 'sanctum')->patchJson("/api/space/$space->id/task/$task->id", []);
+        $response = $this->actingAs($user, 'sanctum')->patchJson(
+            "/api/space/$space->id/task/$task->id",
+            []
+        );
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['title']);
@@ -179,9 +205,12 @@ describe('SpaceTaskController', function () {
             'updated_by_id' => $anotherUser->id,
         ]);
 
-        $response = $this->actingAs($user, 'sanctum')->patchJson("/api/space/$notOwnedSpace->id/task/$task->id", [
-            'title' => 'forbidden title',
-        ]);
+        $response = $this->actingAs($user, 'sanctum')->patchJson(
+            "/api/space/$notOwnedSpace->id/task/$task->id",
+            [
+                'title' => 'forbidden title',
+            ]
+        );
 
         $response->assertForbidden();
         $response->assertJson(['message' => 'This action is unauthorized.']);
@@ -190,7 +219,11 @@ describe('SpaceTaskController', function () {
     it('should soft delete task', function () {
         /** @var Tests\TestCase $this */
         $user = User::factory()->create();
-        $space = Space::factory()->create(['created_by_id' => $user->id, 'updated_by_id' => $user->id, 'name' => 'owned']);
+        $space = Space::factory()->create([
+            'created_by_id' => $user->id,
+            'updated_by_id' => $user->id,
+            'name' => 'owned',
+        ]);
 
         $task = Task::factory()->create([
             'space_id' => $space->id,
@@ -198,7 +231,9 @@ describe('SpaceTaskController', function () {
             'updated_by_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($user, 'sanctum')->deleteJson("/api/space/{$space->id}/task/$task->id");
+        $response = $this->actingAs($user, 'sanctum')->deleteJson(
+            "/api/space/{$space->id}/task/$task->id"
+        );
 
         $softDeleted = Task::withTrashed()->find($task->id);
         $response->assertNoContent();
