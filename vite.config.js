@@ -12,7 +12,7 @@ export default defineConfig({
         react(),
         removeAttr({
             extensions: ['tsx'],
-            attributes: ['dusk']
+            attributes: ['data-dusk']
         })
     ],
 });
