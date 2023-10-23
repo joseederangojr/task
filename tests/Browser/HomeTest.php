@@ -5,8 +5,9 @@ use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\HomePage;
 
 afterEach(function () {
-    $this->browse(function (Browser $browser) {
-        $browser->logout();
+    /** @var Tests\DuskTestCase $this */
+    $this->browse(function (Browser $browse) {
+        $browse->logout();
     });
 });
 
@@ -20,6 +21,7 @@ describe('HomeTest', function () {
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(route('web.home', absolute: false))
+                ->waitForRoute('web.auth.signin')
                 ->assertRouteIs('web.auth.signin');
         });
     });
@@ -38,7 +40,8 @@ describe('HomeTest', function () {
                 ->assertSee("Hi {$user->name}")
                 ->assertSee('Spaces')
                 ->assertSee('Settings')
-                ->assertSee('Signout');
+                ->assertSee('Signout')
+                ->assertButtonEnabled('@space-select-trigger');
         });
     });
 
@@ -53,8 +56,7 @@ describe('HomeTest', function () {
                 ->loginAs($user->id)
                 ->visit(new HomePage())
                 ->press('Signout')
-                ->pause(300)
-                ->assertRouteIs('web.auth.signin');
+                ->waitForRoute('web.auth.signin');
         });
     });
 
@@ -62,7 +64,7 @@ describe('HomeTest', function () {
         /** @var Tests\DuskTestCase $this */
         $this->browse(function (Browser $browser) {
             $user = User::factory()->create();
-            $user
+            $select = $user
                 ->spaces()
                 ->create(['name' => $user->name, 'updated_by_id' => $user->id]);
             $browser
@@ -71,10 +73,15 @@ describe('HomeTest', function () {
                 ->assertSee($user->name)
                 ->assertButtonEnabled('@space-select-trigger')
                 ->click('@space-select-trigger')
-                ->pause(100)
-                ->assertSee('New Space')
+                ->waitForText('New Space')
+                ->assertSee('Personal')
+                ->assertSee('Team')
+                ->click("@space-select-{$select->id}")
+                ->assertDontSee('New Space')
+                ->click('@space-select-trigger')
+                ->waitForText('New Space')
                 ->click('@space-select-new')
-                ->pause(100)
+                ->waitForText('Create Space')
                 ->assertSee('Create Space')
                 ->assertSeeIn('@create-space-dialog-create', 'Create')
                 ->assertInputValue('@create-space-dialog-name', '')
@@ -82,17 +89,17 @@ describe('HomeTest', function () {
                 ->click('@create-space-dialog-create')
                 ->assertSee('Creating ...')
                 ->assertButtonDisabled('@create-space-dialog-create')
-                ->pause(100)
+                ->waitForText('My team space')
                 ->assertSee('My team space')
                 ->click('@space-select-new')
-                ->assertInputValue('@create-space-dialog-name', '')
+                ->waitForText('Create Space')
                 ->type('@create-space-dialog-name', 'My team space')
                 ->click('@create-space-dialog-create')
-                ->pause(100)
+                ->waitForText('Space already exist')
                 ->assertSee('Space already exist')
                 ->assertPresent('@dialog-close')
-                ->press('@dialog-close')
-                ->pause(300)
+                ->click('@dialog-close')
+                ->waitUntilMissing('@create-space-dialog-create')
                 ->assertNotPresent('@create-space-dialog-create');
         });
     });
