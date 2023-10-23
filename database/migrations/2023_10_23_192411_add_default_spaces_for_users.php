@@ -20,7 +20,7 @@ return new class extends Migration
                 $user->spaces()->create([
                     'name' => $user->name,
                     'type' => 'personal',
-                    'updated_by_Id' => $user->id,
+                    'updated_by_id' => $user->id,
                 ]);
             }
         });
