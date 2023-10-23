@@ -32,13 +32,12 @@ describe('SignInTest', function () {
             $user = User::factory()->create([]);
             $browser
                 ->visit(new SignInPage())
+                ->waitFor('@email')
                 ->type('@email', $user->email)
                 ->type('@password', 'password')
-                ->pause(300)
                 ->click('@submit')
                 ->assertButtonDisabled('@submit')
-                ->pause(300)
-                ->assertPathIs('/');
+                ->waitForRoute('web.home');
         });
     });
 
@@ -48,14 +47,12 @@ describe('SignInTest', function () {
             $browser
                 ->visit(new SignInPage())
                 ->click('@submit')
-                ->pause(300)
-                ->assertSee('The email field is required')
+                ->waitForText('The email field is required')
                 ->assertSee('The password field is required')
                 ->type('@email', 'invalid@email.com')
                 ->type('@password', 'password')
                 ->click('@submit')
-                ->pause(300)
-                ->assertSee('Invalid email or password');
+                ->waitForText('Invalid email or password');
         });
     });
 
@@ -64,10 +61,9 @@ describe('SignInTest', function () {
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(new SignInPage())
-                ->assertSee('Sign up')
+                ->waitForText('Sign up')
                 ->click('@signup')
-                ->pause(300)
-                ->assertPathIs('/signup');
+                ->waitForRoute('web.auth.signup');
         });
     });
 });

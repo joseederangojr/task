@@ -54,7 +54,7 @@ function AppLayout(props: React.PropsWithChildren) {
                     <Separator className="my-2" />
                     <Sidebar items={sidebarItems} />
                 </div>
-                <div className="w-full p-4">
+                <div data-dusk="app-layout-content" className="w-full p-4">
                     <div className="flex mb-2 justify-between">
                         <Breadcrumb items={breadcrumbs} />
                         <UserProfile

@@ -23,6 +23,7 @@ function SpaceSelect(props: SpaceSelectProps) {
     const [selectedSpace, setSelectedSpace] = useRemember<string>(
         props.personal.id as unknown as string,
     );
+
     return (
         <Select
             defaultValue={selectedSpace}
@@ -35,6 +36,7 @@ function SpaceSelect(props: SpaceSelectProps) {
                     <SelectLabel>Personal</SelectLabel>
                     <SelectItem
                         key={props.personal.id}
+                        data-dusk={`space-select-${props.personal.id}`}
                         value={props.personal.id as unknown as string}>
                         {props.personal.name}
                     </SelectItem>
@@ -42,7 +44,10 @@ function SpaceSelect(props: SpaceSelectProps) {
                 <SelectGroup>
                     <SelectLabel>Team</SelectLabel>
                     {props.team.map((space) => (
-                        <SelectItem key={space.id} value={space.id as unknown as string}>
+                        <SelectItem
+                            key={space.id}
+                            data-dusk={`space-select-${space.id}`}
+                            value={space.id as unknown as string}>
                             {space.name}
                         </SelectItem>
                     ))}
