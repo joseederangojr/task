@@ -72,8 +72,7 @@ jobs:
                   echo 'echo "Setup Laravel"' >> deploy.sh
                   echo 'chmod -R 775 storage' >> deploy.sh
                   echo "if [ ! -d /home/$SSH_USER/$TARGET_FOLDER ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/public /home/$SSH_USER/$TARGET_FOLDER; fi" >> deploy.sh
-                  echo "if [ ! -d /home/$SSH_USER/$TARGET_FOLDER/storage ]; then ln -s /home/$SSH_USER/apps/$TARGET_FOLDER/storage/app/public /home/$SSH_USER/$TARGET_FOLDER/storage; fi" >> deploy.sh
-                  echo '/opt/alt/php82/usr/bin/php artisan storage:link' >> deploy.sh
+                  echo "if [ ! -d /home/$SSH_USER/$TARGET_FOLDER/storage ]; then /opt/alt/php82/usr/bin/php artisan storage:link; fi" >> deploy.sh
                   echo '/opt/alt/php82/usr/bin/php artisan migrate --force --seed' >> deploy.sh
                   echo '/opt/alt/php82/usr/bin/php artisan cache:clear' >> deploy.sh
                   echo '/opt/alt/php82/usr/bin/php artisan config:clear' >> deploy.sh
