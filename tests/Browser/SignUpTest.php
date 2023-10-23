@@ -5,8 +5,9 @@ use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\SignUpPage;
 
 afterEach(function () {
-    $this->browse(function (Browser $browser) {
-        $browser->logout();
+    /** @var Tests\DuskTestCase $this */
+    $this->browse(function (Browser $browse) {
+        $browse->logout();
     });
 });
 
@@ -37,10 +38,7 @@ describe('SignUpTest', function () {
                 ->type('@password_confirmation', 'password')
                 ->click('@submit')
                 ->assertButtonDisabled('@submit')
-                ->pause(300)
-                ->assertPathIs('/');
-
-            $browser->deleteCookie('laravel_session');
+                ->waitForRoute('web.home');
         });
     });
 
@@ -56,27 +54,24 @@ describe('SignUpTest', function () {
             $browser
                 ->visit(new SignUpPage())
                 ->click('@submit')
-                ->pause(300)
-                ->assertSee('The name field is required.')
+                ->waitForText('The name field is required.')
                 ->assertSee('The email field is required.')
                 ->assertSee('The password field is required.')
                 ->assertSee('The password confirmation field is required.')
                 ->click('@submit')
-                ->pause(300)
+                ->waitFor('@name')
                 ->type('@name', 'Name')
                 ->type('@email', $user->email)
                 ->type('@password', 'asdfasdasdasd')
                 ->type('@password_confirmation', 'asdsadasd')
                 ->click('@submit')
-                ->pause(300)
-                ->assertSee('The password field confirmation does not match.')
+                ->waitForText('The password field confirmation does not match.')
                 ->clear('@password')
                 ->clear('@password_confirmation')
                 ->type('@password', 'password')
                 ->type('@password_confirmation', 'password')
                 ->click('@submit')
-                ->pause(300)
-                ->assertSee('The email has already been taken');
+                ->waitForText('The email has already been taken');
         });
     });
 
@@ -87,8 +82,7 @@ describe('SignUpTest', function () {
                 ->visit(new SignUpPage())
                 ->assertSee('Sign In')
                 ->click('@signin')
-                ->pause(300)
-                ->assertRouteIs('web.auth.signin');
+                ->waitForRoute('web.auth.signin');
         });
     });
 });

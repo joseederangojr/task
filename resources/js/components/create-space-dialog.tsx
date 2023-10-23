@@ -32,7 +32,6 @@ function CreateSpaceDialog(props: CreateSpaceDialogProps) {
             preserveState: true,
             onSuccess: () => {
                 props.onOpenChange(false);
-                form.reset();
             },
         });
     };
