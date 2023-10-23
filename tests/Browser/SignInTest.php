@@ -4,6 +4,13 @@ use App\Models\User;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\SignInPage;
 
+beforeEach(function () {
+    /** @var Tests\DuskTestCase $this */
+    $this->browse(function (Browser $browse) {
+        $browse->logout();
+    });
+});
+
 afterEach(function () {
     /** @var Tests\DuskTestCase $this */
     $this->browse(function (Browser $browse) {
@@ -38,6 +45,7 @@ describe('SignInTest', function () {
                 ->click('@submit')
                 ->assertButtonDisabled('@submit')
                 ->waitForRoute('web.home');
+            $browser->logout();
         });
     });
 

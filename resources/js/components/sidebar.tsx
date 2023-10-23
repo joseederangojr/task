@@ -37,6 +37,7 @@ function Sidebar(props: Props) {
                 <SidebarItem
                     {...item}
                     key={item.label}
+                    data-dusk={`sidebar-item-${item.label}`}
                     active={
                         (window.location.pathname === "/" && item.href === "/") ||
                         (window.location.pathname !== "/" &&
@@ -45,6 +46,7 @@ function Sidebar(props: Props) {
                 />
             ))}
             <SidebarItem
+                data-dusk="sidebar-item-Signout"
                 as="button"
                 icon={<PinLeftIcon />}
                 label="Signout"

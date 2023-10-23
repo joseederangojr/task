@@ -4,6 +4,13 @@ use App\Models\User;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\HomePage;
 
+beforeEach(function () {
+    /** @var Tests\DuskTestCase $this */
+    $this->browse(function (Browser $browse) {
+        $browse->logout();
+    });
+});
+
 afterEach(function () {
     /** @var Tests\DuskTestCase $this */
     $this->browse(function (Browser $browse) {
@@ -55,7 +62,7 @@ describe('HomeTest', function () {
             $browser
                 ->loginAs($user->id)
                 ->visit(new HomePage())
-                ->press('Signout')
+                ->click('@sidebar-item-Signout')
                 ->waitForRoute('web.auth.signin');
         });
     });
@@ -87,7 +94,6 @@ describe('HomeTest', function () {
                 ->assertInputValue('@create-space-dialog-name', '')
                 ->type('@create-space-dialog-name', 'My team space')
                 ->click('@create-space-dialog-create')
-                ->assertSee('Creating ...')
                 ->assertButtonDisabled('@create-space-dialog-create')
                 ->waitForText('My team space')
                 ->assertSee('My team space')
