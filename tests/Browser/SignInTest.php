@@ -44,8 +44,8 @@ describe('SignInTest', function () {
                 ->type('@password', 'password')
                 ->click('@submit')
                 ->assertButtonDisabled('@submit')
-                ->waitForRoute('web.home');
-            $browser->logout();
+                ->waitForRoute('web.space.index')
+                ->assertRouteIs('web.space.index');
         });
     });
 
@@ -71,7 +71,8 @@ describe('SignInTest', function () {
                 ->visit(new SignInPage())
                 ->waitForText('Sign up')
                 ->click('@signup')
-                ->waitForRoute('web.auth.signup');
+                ->waitForRoute('web.auth.signup')
+                ->assertRouteIs('web.auth.signup');
         });
     });
 });

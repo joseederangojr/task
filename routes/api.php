@@ -17,16 +17,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('auth')
+    ->name('auth.')
     ->group(function () {
         Route::post('signin', Auth\SignInController::class)
             ->name('signin')
             ->middleware('guest');
-        Route::post('signup', Auth\SignUpController::class)->middleware('guest');
+        Route::post('signup', Auth\SignUpController::class)
+            ->name('signup')
+            ->middleware('guest');
         Route::post('signout', Auth\SignOutController::class)
             ->name('signout')
             ->middleware('auth');
-    })
-    ->name('auth.');
+    });
 
 Route::apiResource('space', SpaceController::class)
     ->middleware('auth')

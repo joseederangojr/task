@@ -26,7 +26,7 @@ class SignInController extends Controller
             ]);
         }
 
-        return response()->redirectTo(route('web.home'));
+        return response()->redirectTo(route('web.space.index'));
     }
 
     public function page()

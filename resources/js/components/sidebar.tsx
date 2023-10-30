@@ -38,11 +38,7 @@ function Sidebar(props: Props) {
                     {...item}
                     key={item.label}
                     data-dusk={`sidebar-item-${item.label}`}
-                    active={
-                        (window.location.pathname === "/" && item.href === "/") ||
-                        (window.location.pathname !== "/" &&
-                            item.href.startsWith(window.location.pathname))
-                    }
+                    active={item.active}
                 />
             ))}
             <SidebarItem

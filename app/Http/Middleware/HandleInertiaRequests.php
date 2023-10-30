@@ -31,11 +31,9 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'user' => [
-                'whoami' => $request?->user(),
-                'spaces' => $request?->user()?->spaces,
-            ],
+            'whoami' => $request?->user(),
             'breadcrumbs' => [],
+            'spaces' => $request?->user()?->spaces ?? [],
         ];
     }
 }

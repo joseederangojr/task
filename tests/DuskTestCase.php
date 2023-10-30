@@ -2,15 +2,36 @@
 
 namespace Tests;
 
+use App\Models\User;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
+use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
 
 abstract class DuskTestCase extends BaseTestCase
 {
+    /**
+     * The resolved user.
+     */
+    public User $user;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+        $this->user
+            ->spaces()
+            ->create(['name' => $this->user->name, 'updated_by_id' => $this->user->id]);
+        Browser::$userResolver = fn () => $this->user;
+    }
+
     use CreatesApplication {
         createApplication as traitCreateApplication;
     }

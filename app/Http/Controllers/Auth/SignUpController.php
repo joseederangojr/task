@@ -24,7 +24,7 @@ class SignUpController extends Controller
             'name' => $user->name,
         ]);
 
-        return response()->redirectTo(route('web.home'));
+        return response()->redirectTo(route('web.space.index'));
     }
 
     public function page()
