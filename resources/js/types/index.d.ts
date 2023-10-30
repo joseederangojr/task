@@ -1,6 +1,4 @@
 import { BreadcrumbItemProps } from "@/components/breadcrumb";
-import { ClassAttributes, HTMLAttributes as BaseHTMLAttributes } from "react";
-
 export interface Space {
     id: number;
     name: string;
@@ -21,11 +19,8 @@ export interface User {
     updated_at: number;
 }
 
-export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
-    user: {
-        whoami?: User;
-        spaces: Space[];
-    };
-
+export type PageProps<T = Record<string, unknown>> = T & {
+    whoami: User;
     breadcrumbs: BreadcrumbItemProps[];
+    spaces: Space[];
 };

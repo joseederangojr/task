@@ -45,7 +45,8 @@ describe('SignUpTest', function () {
                 ->type('@password_confirmation', 'password')
                 ->click('@submit')
                 ->assertButtonDisabled('@submit')
-                ->waitForRoute('web.home');
+                ->waitForRoute('web.space.index')
+                ->assertRouteIs('web.space.index');
         });
     });
 
@@ -89,7 +90,8 @@ describe('SignUpTest', function () {
                 ->visit(new SignUpPage())
                 ->assertSee('Sign In')
                 ->click('@signin')
-                ->waitForRoute('web.auth.signin');
+                ->waitForRoute('web.auth.signin')
+                ->assertRouteIs('web.auth.signin');
         });
     });
 });

@@ -11,32 +11,27 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import { Space } from "@/types";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { useRemember } from "@inertiajs/react";
 
 type SpaceSelectProps = {
     personal: Space;
     team: Space[];
+    selectedSpace: string;
     onCreateNewSpace: () => void;
+    onSpaceSelected: (id: string) => void;
 };
 
 function SpaceSelect(props: SpaceSelectProps) {
-    const [selectedSpace, setSelectedSpace] = useRemember<string>(
-        props.personal.id as unknown as string,
-    );
-
     return (
-        <Select
-            defaultValue={selectedSpace}
-            onValueChange={(value) => setSelectedSpace(value)}>
-            <SelectTrigger data-dusk="space-select-trigger" className="w-full">
+        <Select defaultValue={props.selectedSpace} onValueChange={props.onSpaceSelected}>
+            <SelectTrigger data-dusk="space-select-trigger">
                 <SelectValue placeholder="Select a space" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent data-dusk="space-select-items">
                 <SelectGroup>
                     <SelectLabel>Personal</SelectLabel>
                     <SelectItem
                         key={props.personal.id}
-                        data-dusk={`space-select-${props.personal.id}`}
+                        data-dusk={`space-select-item-${props.personal.id}`}
                         value={props.personal.id as unknown as string}>
                         {props.personal.name}
                     </SelectItem>
@@ -46,7 +41,7 @@ function SpaceSelect(props: SpaceSelectProps) {
                     {props.team.map((space) => (
                         <SelectItem
                             key={space.id}
-                            data-dusk={`space-select-${space.id}`}
+                            data-dusk={`space-select-item-${space.id}`}
                             value={space.id as unknown as string}>
                             {space.name}
                         </SelectItem>

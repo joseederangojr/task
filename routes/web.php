@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Auth\SignInController;
 use App\Http\Controllers\Auth\SignUpController;
+use App\Http\Controllers\SpaceController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,19 +16,12 @@ use Inertia\Inertia;
 |
 */
 
-Route::get(
-    '/',
-    fn () => Inertia::render('home/page', [
-        'breadcrumbs' => [
-            [
-                'label' => 'Dashboard',
-                'href' => route('web.home', absolute: false),
-                'isCurrentPage' => true,
-            ],
-        ],
-    ])
-)
+Route::get('/', fn () => redirect()->route('web.space.index'))
     ->name('home')
+    ->middleware('auth');
+
+Route::resource('space', SpaceController::class)
+    ->only(['show', 'index'])
     ->middleware('auth');
 
 Route::name('auth.')->group(function () {

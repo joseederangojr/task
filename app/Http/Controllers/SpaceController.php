@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
 
 class SpaceController extends Controller
 {
@@ -19,8 +20,8 @@ class SpaceController extends Controller
     {
         Gate::authorize('viewAny', Space::class);
 
-        return response()->json([
-            'data' => $request->user()->spaces,
+        return Inertia::render('space/page', [
+            'spaces' => $request->user()->spaces,
         ]);
     }
 
@@ -60,7 +61,28 @@ class SpaceController extends Controller
     {
         Gate::authorize('view', [$space]);
 
-        return response()->json(['data' => $space]);
+        return Inertia::render('space/[id]/page', [
+            'breadcrumbs' => [
+                [
+                    'label' => 'Dashboard',
+                    'href' => route('web.home', absolute: false),
+                    'isCurrentPage' => false,
+                ],
+                [
+                    'label' => 'Space',
+                    'href' => route('web.home', absolute: false),
+                    'isCurrentPage' => false,
+                    'isDisabled' => true,
+                ],
+                [
+                    'label' => $space->name,
+                    'href' => route('web.space.show', ['space' => $space->id], false),
+                    'isCurrentPage' => true,
+                ],
+            ],
+            'space' => $space,
+            'tasks' => $space->tasks,
+        ]);
     }
 
     /**
@@ -71,7 +93,7 @@ class SpaceController extends Controller
         $space->update($request->validated());
         $space->refresh();
 
-        return response()->json(['data' => $space]);
+        return back();
     }
 
     /**
@@ -88,6 +110,6 @@ class SpaceController extends Controller
 
         $space->delete();
 
-        return response()->noContent();
+        return back();
     }
 }

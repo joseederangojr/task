@@ -2,17 +2,31 @@
 
 namespace Tests\Browser\Pages;
 
+use App\Models\User;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page;
 
-class HomePage extends Page
+class SpaceByIdPage extends Page
 {
+    public function __construct(public User $user)
+    {
+        //
+    }
+
     /**
      * Get the URL for the page.
      */
     public function url(): string
     {
-        return route('web.home', absolute: false);
+        $space = $this->user->spaces()->first();
+
+        return route(
+            'web.space.show',
+            [
+                'space' => $space->id,
+            ],
+            absolute: false
+        );
     }
 
     /**
