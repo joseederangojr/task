@@ -68,5 +68,8 @@
 		"react-day-picker": "^8.10.1",
 		"remove-attr": "^0.0.13",
 		"tailwind-merge": "^1.14.0"
+	},
+	"engines": {
+		"node": "22.x"
 	}
 }
