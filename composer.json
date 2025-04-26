@@ -52,7 +52,11 @@
 			"@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
 		],
 		"post-create-project-cmd": ["@php artisan key:generate --ansi"],
-		"vercel": ["@php artisan migrate", "corepack enable", "pnpm install"]
+		"vercel": [
+			"@php artisan migrate --force",
+			"corepack enable",
+			"pnpm install"
+		]
 	},
 	"extra": {
 		"laravel": {
