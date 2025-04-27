@@ -3,23 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Concerns\HashPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
-
-trait HashPassword
-{
-    public static function bootHashPassword()
-    {
-        static::saving(function (User $model) {
-            if (! Hash::isHashed($model->password)) {
-                $model->password = Hash::make($model->password);
-            }
-        });
-    }
-}
 
 class User extends Authenticatable
 {

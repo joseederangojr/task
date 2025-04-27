@@ -2,12 +2,11 @@
 
 namespace App\Models\Concerns;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 trait HasUpdated
 {
-    use ModelTrait;
-
     public static function bootHasUpdated()
     {
         static::saving(function (Model $model) {

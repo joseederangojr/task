@@ -21,3 +21,4 @@ build
 build.tar
 .vercel
 .env*.local
+_ide_helper*.php

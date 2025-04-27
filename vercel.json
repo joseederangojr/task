@@ -15,19 +15,12 @@
 		}
 	],
 	"env": {
-		"APP_NAME": "Task",
-		"APP_ENV": "production",
-		"APP_DEBUG": "false",
-		"APP_URL": "https://task-six-wheat.vercel.app",
-		"VERCEL_DEMO_MODE": "true",
+		"VERCEL_DEMO_MODE": "false",
 		"APP_CONFIG_CACHE": "/tmp/config.php",
 		"APP_EVENTS_CACHE": "/tmp/events.php",
 		"APP_PACKAGES_CACHE": "/tmp/packages.php",
 		"APP_ROUTES_CACHE": "/tmp/routes.php",
 		"APP_SERVICES_CACHE": "/tmp/services.php",
-		"CACHE_DRIVER": "redis",
-		"LOG_CHANNEL": "stderr",
-		"SESSION_DRIVER": "redis",
 		"VIEW_COMPILED_PATH": "/tmp/views",
 		"SSR_TEMP_PATH": "/tmp/ssr",
 		"NODE_PATH": "node"
