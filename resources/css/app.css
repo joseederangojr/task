@@ -4,65 +4,67 @@
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 20 14.3% 4.1%;
+        /* Catppuccin Latte (Light Mode) */
+        --background: 220 16% 92%; /* base */
+        --foreground: 234 16% 35%; /* text */
 
-        --card: 0 0% 100%;
-        --card-foreground: 20 14.3% 4.1%;
+        --card: 220 23% 95%; /* crust */
+        --card-foreground: 234 16% 35%; /* text */
 
-        --popover: 0 0% 100%;
-        --popover-foreground: 20 14.3% 4.1%;
+        --popover: 220 23% 95%; /* crust */
+        --popover-foreground: 234 16% 35%; /* text */
 
-        --primary: 24 9.8% 10%;
-        --primary-foreground: 60 9.1% 97.8%;
+        --primary: 234 16% 35%; /* text */
+        --primary-foreground: 220 23% 95%; /* crust */
 
-        --secondary: 60 4.8% 95.9%;
-        --secondary-foreground: 24 9.8% 10%;
+        --secondary: 223 16% 83%; /* surface0 */
+        --secondary-foreground: 234 16% 35%; /* text */
 
-        --muted: 60 4.8% 95.9%;
-        --muted-foreground: 25 5.3% 44.7%;
+        --muted: 223 16% 83%; /* surface0 */
+        --muted-foreground: 231 15% 50%; /* subtext0 */
 
-        --accent: 60 4.8% 95.9%;
-        --accent-foreground: 24 9.8% 10%;
+        --accent: 223 16% 83%; /* surface0 */
+        --accent-foreground: 234 16% 35%; /* text */
 
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 60 9.1% 97.8%;
+        --destructive: 347 87% 44%; /* red */
+        --destructive-foreground: 220 23% 95%; /* crust */
 
-        --border: 20 5.9% 90%;
-        --input: 20 5.9% 90%;
-        --ring: 20 14.3% 4.1%;
+        --border: 223 16% 83%; /* surface0 */
+        --input: 223 16% 83%; /* surface0 */
+        --ring: 231 15% 50%; /* subtext0 */
 
         --radius: 0.5rem;
     }
 
     .dark {
-        --background: 20 14.3% 4.1%;
-        --foreground: 60 9.1% 97.8%;
+        /* Catppuccin Mocha (Dark Mode) */
+        --background: 240 21% 15%; /* base */
+        --foreground: 226 64% 88%; /* text */
 
-        --card: 20 14.3% 4.1%;
-        --card-foreground: 60 9.1% 97.8%;
+        --card: 240 23% 9%; /* crust */
+        --card-foreground: 226 64% 88%; /* text */
 
-        --popover: 20 14.3% 4.1%;
-        --popover-foreground: 60 9.1% 97.8%;
+        --popover: 240 23% 9%; /* crust */
+        --popover-foreground: 226 64% 88%; /* text */
 
-        --primary: 60 9.1% 97.8%;
-        --primary-foreground: 24 9.8% 10%;
+        --primary: 226 64% 88%; /* text */
+        --primary-foreground: 240 23% 9%; /* crust */
 
-        --secondary: 12 6.5% 15.1%;
-        --secondary-foreground: 60 9.1% 97.8%;
+        --secondary: 240 24% 23%; /* surface0 */
+        --secondary-foreground: 226 64% 88%; /* text */
 
-        --muted: 12 6.5% 15.1%;
-        --muted-foreground: 24 5.4% 63.9%;
+        --muted: 240 24% 23%; /* surface0 */
+        --muted-foreground: 228 24% 72%; /* subtext0 */
 
-        --accent: 12 6.5% 15.1%;
-        --accent-foreground: 60 9.1% 97.8%;
+        --accent: 240 24% 23%; /* surface0 */
+        --accent-foreground: 226 64% 88%; /* text */
 
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 60 9.1% 97.8%;
+        --destructive: 343 81% 75%; /* red */
+        --destructive-foreground: 240 23% 9%; /* crust */
 
-        --border: 12 6.5% 15.1%;
-        --input: 12 6.5% 15.1%;
-        --ring: 24 5.7% 82.9%;
+        --border: 240 24% 23%; /* surface0 */
+        --input: 240 24% 23%; /* surface0 */
+        --ring: 228 24% 72%; /* subtext0 */
     }
 }
 
@@ -72,5 +74,268 @@
     }
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+/* Catppuccin accent color utility classes */
+@layer utilities {
+    /* Light mode accent colors */
+    .text-rosewater {
+        color: #dc8a78;
+    }
+    .text-flamingo {
+        color: #dd7878;
+    }
+    .text-pink {
+        color: #ea76cb;
+    }
+    .text-mauve {
+        color: #8839ef;
+    }
+    .text-red {
+        color: #d20f39;
+    }
+    .text-maroon {
+        color: #e64553;
+    }
+    .text-peach {
+        color: #fe640b;
+    }
+    .text-yellow {
+        color: #df8e1d;
+    }
+    .text-green {
+        color: #40a02b;
+    }
+    .text-teal {
+        color: #179299;
+    }
+    .text-sky {
+        color: #04a5e5;
+    }
+    .text-sapphire {
+        color: #209fb5;
+    }
+    .text-blue {
+        color: #1e66f5;
+    }
+    .text-lavender {
+        color: #7287fd;
+    }
+
+    .bg-rosewater {
+        background-color: #dc8a78;
+    }
+    .bg-flamingo {
+        background-color: #dd7878;
+    }
+    .bg-pink {
+        background-color: #ea76cb;
+    }
+    .bg-mauve {
+        background-color: #8839ef;
+    }
+    .bg-red {
+        background-color: #d20f39;
+    }
+    .bg-maroon {
+        background-color: #e64553;
+    }
+    .bg-peach {
+        background-color: #fe640b;
+    }
+    .bg-yellow {
+        background-color: #df8e1d;
+    }
+    .bg-green {
+        background-color: #40a02b;
+    }
+    .bg-teal {
+        background-color: #179299;
+    }
+    .bg-sky {
+        background-color: #04a5e5;
+    }
+    .bg-sapphire {
+        background-color: #209fb5;
+    }
+    .bg-blue {
+        background-color: #1e66f5;
+    }
+    .bg-lavender {
+        background-color: #7287fd;
+    }
+
+    .border-rosewater {
+        border-color: #dc8a78;
+    }
+    .border-flamingo {
+        border-color: #dd7878;
+    }
+    .border-pink {
+        border-color: #ea76cb;
+    }
+    .border-mauve {
+        border-color: #8839ef;
+    }
+    .border-red {
+        border-color: #d20f39;
+    }
+    .border-maroon {
+        border-color: #e64553;
+    }
+    .border-peach {
+        border-color: #fe640b;
+    }
+    .border-yellow {
+        border-color: #df8e1d;
+    }
+    .border-green {
+        border-color: #40a02b;
+    }
+    .border-teal {
+        border-color: #179299;
+    }
+    .border-sky {
+        border-color: #04a5e5;
+    }
+    .border-sapphire {
+        border-color: #209fb5;
+    }
+    .border-blue {
+        border-color: #1e66f5;
+    }
+    .border-lavender {
+        border-color: #7287fd;
+    }
+
+    /* Dark mode accent colors */
+    .dark .dark\:text-rosewater {
+        color: #f5e0dc;
+    }
+    .dark .dark\:text-flamingo {
+        color: #f2cdcd;
+    }
+    .dark .dark\:text-pink {
+        color: #f5c2e7;
+    }
+    .dark .dark\:text-mauve {
+        color: #cba6f7;
+    }
+    .dark .dark\:text-red {
+        color: #f38ba8;
+    }
+    .dark .dark\:text-maroon {
+        color: #eba0ac;
+    }
+    .dark .dark\:text-peach {
+        color: #fab387;
+    }
+    .dark .dark\:text-yellow {
+        color: #f9e2af;
+    }
+    .dark .dark\:text-green {
+        color: #a6e3a1;
+    }
+    .dark .dark\:text-teal {
+        color: #94e2d5;
+    }
+    .dark .dark\:text-sky {
+        color: #89dceb;
+    }
+    .dark .dark\:text-sapphire {
+        color: #74c7ec;
+    }
+    .dark .dark\:text-blue {
+        color: #89b4fa;
+    }
+    .dark .dark\:text-lavender {
+        color: #b4befe;
+    }
+
+    .dark .dark\:bg-rosewater {
+        background-color: #f5e0dc;
+    }
+    .dark .dark\:bg-flamingo {
+        background-color: #f2cdcd;
+    }
+    .dark .dark\:bg-pink {
+        background-color: #f5c2e7;
+    }
+    .dark .dark\:bg-mauve {
+        background-color: #cba6f7;
+    }
+    .dark .dark\:bg-red {
+        background-color: #f38ba8;
+    }
+    .dark .dark\:bg-maroon {
+        background-color: #eba0ac;
+    }
+    .dark .dark\:bg-peach {
+        background-color: #fab387;
+    }
+    .dark .dark\:bg-yellow {
+        background-color: #f9e2af;
+    }
+    .dark .dark\:bg-green {
+        background-color: #a6e3a1;
+    }
+    .dark .dark\:bg-teal {
+        background-color: #94e2d5;
+    }
+    .dark .dark\:bg-sky {
+        background-color: #89dceb;
+    }
+    .dark .dark\:bg-sapphire {
+        background-color: #74c7ec;
+    }
+    .dark .dark\:bg-blue {
+        background-color: #89b4fa;
+    }
+    .dark .dark\:bg-lavender {
+        background-color: #b4befe;
+    }
+
+    .dark .dark\:border-rosewater {
+        border-color: #f5e0dc;
+    }
+    .dark .dark\:border-flamingo {
+        border-color: #f2cdcd;
+    }
+    .dark .dark\:border-pink {
+        border-color: #f5c2e7;
+    }
+    .dark .dark\:border-mauve {
+        border-color: #cba6f7;
+    }
+    .dark .dark\:border-red {
+        border-color: #f38ba8;
+    }
+    .dark .dark\:border-maroon {
+        border-color: #eba0ac;
+    }
+    .dark .dark\:border-peach {
+        border-color: #fab387;
+    }
+    .dark .dark\:border-yellow {
+        border-color: #f9e2af;
+    }
+    .dark .dark\:border-green {
+        border-color: #a6e3a1;
+    }
+    .dark .dark\:border-teal {
+        border-color: #94e2d5;
+    }
+    .dark .dark\:border-sky {
+        border-color: #89dceb;
+    }
+    .dark .dark\:border-sapphire {
+        border-color: #74c7ec;
+    }
+    .dark .dark\:border-blue {
+        border-color: #89b4fa;
+    }
+    .dark .dark\:border-lavender {
+        border-color: #b4befe;
     }
 }

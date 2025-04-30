@@ -2,14 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class Space extends Model
+/** @mixin Space */
+class Space extends Model implements Sortable
 {
     use Concerns\HasCreated, Concerns\HasUpdated;
     use HasFactory, SoftDeletes;
+    use SortableTrait;
+
+    public $sortable = [
+        'order_column_name' => 'order',
+        'ignore_timestamps' => true,
+    ];
 
     protected $guarded = [];
 
@@ -18,13 +29,20 @@ class Space extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function tasks()
+    public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class)
+            ->orderBy('column_id')
+            ->orderBy('order');
     }
 
-    public function columns()
+    public function columns(): HasMany
     {
-        return $this->hasMany(SpaceColumn::class);
+        return $this->hasMany(Column::class)->orderBy('order');
+    }
+
+    public function buildSortQuery(): Builder
+    {
+        return static::query()->where('space_id', $this->space_id);
     }
 }

@@ -25,12 +25,14 @@ function AppLayout(props: React.PropsWithChildren) {
 
     const handleOnSpaceSelected = (id: string) => {
         setSelectedSpace(id);
-        router.replace(`/space/${id}`, {
+        router.get(`/space/${id}`, {
             preserveState: true,
         });
     };
     const handleOnCreateNewSpace = () => setCreateSpaceDialogIsOpen(true);
-    const handleOnOpenChange = (state: boolean) => setCreateSpaceDialogIsOpen(state);
+    const handleOnOpenChange = (state: boolean) => {
+        setCreateSpaceDialogIsOpen(state);
+    };
 
     return (
         <>

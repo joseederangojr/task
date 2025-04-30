@@ -8,7 +8,7 @@ export interface Space {
     created_at: number;
     updated_at: number;
     deleted_at: number;
-    columns?: SpaceColumn[];
+    columns?: Column[];
     tasks?: Task[];
 }
 
@@ -21,25 +21,28 @@ export interface User {
     updated_at: number;
 }
 
+export type TaskStatus = "triage" | "todo" | "doing" | "done" | "abandon";
+
 export interface Task {
     id: number;
     title: string;
     description?: string;
-    status: "triage" | "todo" | "doing" | "done" | "abandon";
+    status: TaskStatus;
     due_date: string;
     space_id: number;
-    space_column_id: number;
+    column_id: number;
     assigned_to_id?: number;
+    order: number;
     created_by_id: number;
     updated_by_id: number;
     created_at: number;
     updated_at: number;
     deleted_at: number;
     space?: Space;
-    column?: SpaceColumn;
+    column?: Column;
 }
 
-export interface SpaceColumn {
+export interface Column {
     id: number;
     name: string;
     order: number;

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('space_columns', function (Blueprint $table) {
+        Schema::create('columns', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('space_id')->unsigned();
             $table->string('name');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('space_columns');
+        Schema::dropIfExists('columns');
     }
 };

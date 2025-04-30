@@ -28,9 +28,9 @@ class UpdateTaskRequest extends FormRequest
             'status' => 'in:triage,todo,doing,done,abandon',
             'assigned_to_id' => 'sometimes|nullable|exists:users,id',
             'due_date' => 'date|nullable',
-            'space_column_id' => Rule::exists('space_columns', 'id')->where(
+            'column_id' => Rule::exists('columns', 'id')->where(
                 'space_id',
-                $this->space->id
+                $this->space_id
             ),
         ];
     }

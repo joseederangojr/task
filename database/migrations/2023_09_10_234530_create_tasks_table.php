@@ -18,9 +18,10 @@ return new class extends Migration
             $table
                 ->enum('status', ['triage', 'todo', 'doing', 'done', 'abandon'])
                 ->default('triage');
+            $table->integer('order');
             $table->date('due_date')->nullable();
             $table->unsignedBigInteger('space_id');
-            $table->unsignedBigInteger('space_column_id');
+            $table->unsignedBigInteger('column_id');
             $table->unsignedBigInteger('assigned_to_id')->nullable();
             $table->unsignedBigInteger('created_by_id');
             $table->unsignedBigInteger('updated_by_id');
@@ -45,9 +46,9 @@ return new class extends Migration
                 ->on('spaces');
 
             $table
-                ->foreign('space_column_id')
+                ->foreign('column_id')
                 ->references('id')
-                ->on('space_columns')
+                ->on('columns')
                 ->cascadeOnDelete();
         });
     }

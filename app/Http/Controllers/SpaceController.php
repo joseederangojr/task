@@ -19,9 +19,10 @@ class SpaceController extends Controller
     public function index(Request $request)
     {
         Gate::authorize('viewAny', Space::class);
+        $user = $request->user();
 
         return Inertia::render('space/page', [
-            'spaces' => $request->user()->spaces,
+            'spaces' => $user->spaces,
         ]);
     }
 
@@ -30,7 +31,7 @@ class SpaceController extends Controller
      */
     public function store(StoreSpaceRequest $request)
     {
-        /** @var User */
+        /** @var User $user */
         $user = $request->user();
 
         /** @var Space */
@@ -51,34 +52,6 @@ class SpaceController extends Controller
             ]);
         }
 
-        $space->columns()->createMany([
-            [
-                'name' => 'Triage',
-                'status' => 'triage',
-                'order' => 0,
-            ],
-            [
-                'name' => 'To Do',
-                'status' => 'todo',
-                'order' => 1,
-            ],
-            [
-                'name' => 'Doing',
-                'status' => 'doing',
-                'order' => 2,
-            ],
-            [
-                'name' => 'Done',
-                'status' => 'done',
-                'order' => 3,
-            ],
-            [
-                'name' => 'Abandon',
-                'status' => 'abandon',
-                'order' => 4,
-            ],
-        ]);
-
         return back();
     }
 
@@ -91,7 +64,7 @@ class SpaceController extends Controller
 
         $space->load('columns', 'columns.tasks');
 
-        return Inertia::render('space/[id]/page', [
+        return Inertia::render('space/[space]/page', [
             'breadcrumbs' => [
                 [
                     'label' => 'Dashboard',
@@ -111,6 +84,7 @@ class SpaceController extends Controller
                 ],
             ],
             'space' => $space,
+            'team' => fn () => User::all(),
         ]);
     }
 

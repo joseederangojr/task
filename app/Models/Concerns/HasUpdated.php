@@ -7,17 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 
 trait HasUpdated
 {
+    public string $updatedByColumn = 'updated_by_id';
+
     public static function bootHasUpdated()
     {
         static::saving(function (Model $model) {
-            if (! $model->updated_by_id) {
-                $model->updated_by_id = auth()->user()->id;
+            if (method_exists($model, 'getUpdatedByColumn')) {
+                $model->{$model->getUpdatedByColumn()} = auth()->user()->id;
             }
         });
     }
 
+    public function getUpdatedByColumn()
+    {
+        return $this->updatedByColumn;
+    }
+
     public function updatedBy()
     {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->belongsTo(User::class, $this->getUpdatedByColumn());
     }
 }

@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\SpaceController;
-use App\Http\Controllers\SpaceTaskController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskMoveController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,10 +34,10 @@ Route::prefix('auth')
 Route::apiResource('space', SpaceController::class)
     ->middleware('auth')
     ->only(['index', 'store', 'show', 'update', 'destroy']);
-Route::apiResource('space.task', SpaceTaskController::class)
+Route::apiResource('task', TaskController::class)
     ->middleware('auth')
     ->only(['index', 'update', 'store', 'show', 'destroy']);
 
-// Route::post('/space/{space}/task/{task}', [SpaceTaskController::class, 'update'])->name(
-//     'space.task.update'
-// );
+Route::match(['patch', 'put'], 'task/{task}/move', TaskMoveController::class)
+    ->name('space.move')
+    ->middleware('auth');
