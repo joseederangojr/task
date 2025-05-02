@@ -7,7 +7,7 @@ use App\Models\Task;
 
 class MoveTask
 {
-    public function handle(Task $task, MoveTaskData $move)
+    public function handle(Task $task, MoveTaskData $move): void
     {
         $task->update([
             'order' => $move->order,

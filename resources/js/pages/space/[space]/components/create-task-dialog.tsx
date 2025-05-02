@@ -65,6 +65,7 @@ export const CreateTaskDialog = (props: CreateTaskDialogProps) => {
 			preserveState: true,
 			onSuccess: () => {
 				props.onOpenChange(false);
+				form.reset();
 			},
 		});
 	};

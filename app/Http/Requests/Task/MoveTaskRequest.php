@@ -22,10 +22,8 @@ class MoveTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'from_column_id' => 'required|exists:columns,id',
-            'from_order' => 'required',
-            'to_column_id' => 'required|exists:columns,id',
-            'to_order' => 'required',
+            'column_id' => 'required|exists:columns,id',
+            'order' => 'required',
         ];
     }
 }

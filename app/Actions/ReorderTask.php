@@ -2,17 +2,18 @@
 
 namespace App\Actions;
 
-use App\Data\MoveTaskData;
 use App\Models\Task;
 
 class ReorderTask
 {
-    public function __construct(private Task $task, private MoveTaskData $move) {}
-
-    public function handle(): ReorderTaskUp|ReorderTaskDown
+    public function handle(int $columnId): void
     {
-        return $this->task->order - $this->move->order > 0
-            ? new ReorderTaskUp
-            : new ReorderTaskDown;
+        $ids = Task::query()
+            ->whereColumnId($columnId)
+            ->orderBy('order')
+            ->orderByDesc('updated_at')
+            ->pluck('id');
+
+        Task::setNewOrder($ids);
     }
 }

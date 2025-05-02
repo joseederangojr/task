@@ -27,12 +27,9 @@ export default function SpaceByIdPage(props: PageProps<Props>) {
 		setActiveTask(null);
 		if (active && over) {
 			const isOverTask = over.task && !over.column;
-			console.log({ isOverTask, column: over.column, task: over.task });
 			const data = {
-				from_column_id: active?.column_id,
-				from_order: active.order,
-				to_column_id: isOverTask ? over.task?.column_id : over.column?.id,
-				to_order: isOverTask ? over.task?.order : over.column?.tasks?.length,
+				column_id: isOverTask ? over.task?.column_id : over.column?.id,
+				order: isOverTask ? over.task?.order : over.column!.tasks!.length + 1,
 			};
 			router.patch(`/api/task/${active.id}/move`, data as any);
 		}

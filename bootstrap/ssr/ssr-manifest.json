@@ -1,0 +1,131 @@
+{
+  "node_modules/.pnpm/laravel-vite-plugin@1.2.0_vite@6.3.4_@types+node@22.15.3_jiti@2.4.2_lightningcss@1.29.2_yaml@2.7.1_/node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
+  "resources/css/app.css": [],
+  "resources/js/components/create-space-dialog.tsx": [
+    "/build/assets/create-space-dialog-8b4izWHL.js"
+  ],
+  "resources/js/components/date-picker.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/components/providers.tsx": [],
+  "resources/js/components/space-select.tsx": [
+    "/build/assets/app-layout-BEvtKoCZ.js"
+  ],
+  "resources/js/components/status-display.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/components/status-select.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/components/theme-provider.tsx": [],
+  "resources/js/components/ui/avatar.tsx": [
+    "/build/assets/avatar-CMi-SjUC.js"
+  ],
+  "resources/js/components/ui/button.tsx": [
+    "/build/assets/button-BLClV2bc.js"
+  ],
+  "resources/js/components/ui/calendar.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/components/ui/checkbox.tsx": [
+    "/build/assets/signin-form-EpS-JIkY.js"
+  ],
+  "resources/js/components/ui/command.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/components/ui/dialog.tsx": [
+    "/build/assets/dialog-CIQG8v2s.js"
+  ],
+  "resources/js/components/ui/dropdown-menu.tsx": [
+    "/build/assets/app-layout-BEvtKoCZ.js"
+  ],
+  "resources/js/components/ui/form.tsx": [
+    "/build/assets/input-BZBbPD7X.js"
+  ],
+  "resources/js/components/ui/input.tsx": [
+    "/build/assets/input-BZBbPD7X.js"
+  ],
+  "resources/js/components/ui/label.tsx": [
+    "/build/assets/input-BZBbPD7X.js"
+  ],
+  "resources/js/components/ui/popover.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/components/ui/scroll-area.tsx": [
+    "/build/assets/task-list--vg8FkZc.js"
+  ],
+  "resources/js/components/ui/select.tsx": [
+    "/build/assets/app-layout-BEvtKoCZ.js"
+  ],
+  "resources/js/components/ui/separator.tsx": [
+    "/build/assets/app-layout-BEvtKoCZ.js"
+  ],
+  "resources/js/components/ui/textarea.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/components/ui/toast.tsx": [],
+  "resources/js/components/ui/toaster.tsx": [],
+  "resources/js/components/ui/use-toast.ts": [],
+  "resources/js/components/user-avatar.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/components/user-navigation-dropdown.tsx": [
+    "/build/assets/app-layout-BEvtKoCZ.js"
+  ],
+  "resources/js/components/user-select.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/hooks/use-space.ts": [
+    "/build/assets/app-layout-BEvtKoCZ.js"
+  ],
+  "resources/js/layouts/app-layout.tsx": [
+    "/build/assets/app-layout-BEvtKoCZ.js"
+  ],
+  "resources/js/layouts/auth-layout.tsx": [
+    "/build/assets/auth-layout-Cp0f2hIE.js"
+  ],
+  "resources/js/lib/constants.ts": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/lib/utils.ts": [],
+  "resources/js/pages/auth/signin/components/signin-form.tsx": [
+    "/build/assets/signin-form-EpS-JIkY.js"
+  ],
+  "resources/js/pages/auth/signin/page.tsx": [
+    "/build/assets/page-B42oBD1z.js"
+  ],
+  "resources/js/pages/auth/signup/components/signup-form.tsx": [
+    "/build/assets/signup-form-D5ANjX2G.js"
+  ],
+  "resources/js/pages/auth/signup/page.tsx": [
+    "/build/assets/page-Cb5oKpKN.js"
+  ],
+  "resources/js/pages/dashboard/page.tsx": [
+    "/build/assets/page-BFRtRyAc.js"
+  ],
+  "resources/js/pages/space/[space]/components/create-task-dialog.tsx": [
+    "/build/assets/create-task-dialog-DxlEwKMJ.js"
+  ],
+  "resources/js/pages/space/[space]/components/draggable-task-item.tsx": [
+    "/build/assets/draggable-task-item-DoDW4W0r.js"
+  ],
+  "resources/js/pages/space/[space]/components/droppable-task-item.tsx": [
+    "/build/assets/droppable-task-item-BpfbdeGB.js"
+  ],
+  "resources/js/pages/space/[space]/components/task-item-empty.tsx": [
+    "/build/assets/task-item-empty-Dgdp-cwr.js"
+  ],
+  "resources/js/pages/space/[space]/components/task-item.tsx": [
+    "/build/assets/task-item-CZBFdsos.js"
+  ],
+  "resources/js/pages/space/[space]/components/task-list.tsx": [
+    "/build/assets/task-list--vg8FkZc.js"
+  ],
+  "resources/js/pages/space/[space]/page.tsx": [
+    "/build/assets/page-CkPt9gpI.js"
+  ],
+  "resources/js/pages/space/page.tsx": [
+    "/build/assets/page-BFvJSzq-.js"
+  ],
+  "resources/js/ssr.tsx": []
+}
