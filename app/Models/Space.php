@@ -7,15 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableTrait;
 
 /** @mixin Space */
-class Space extends Model implements Sortable
+class Space extends Model
 {
     use Concerns\HasCreated, Concerns\HasUpdated;
     use HasFactory, SoftDeletes;
-    use SortableTrait;
 
     public $sortable = [
         'order_column_name' => 'order',
@@ -31,9 +28,7 @@ class Space extends Model implements Sortable
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class)
-            ->orderBy('column_id')
-            ->orderBy('order');
+        return $this->hasMany(Task::class)->orderBy('column_id')->orderBy('order');
     }
 
     public function columns(): HasMany
